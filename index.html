@@ -2,1646 +2,1594 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="CRNA Ref">
+<meta name="apple-mobile-web-app-title" content="Anesthesia Ref">
 <meta name="theme-color" content="#0a0c10">
+<title>Anesthesia Clinical Reference</title>
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
-<title>CRNA Clinical Reference</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #0a0c10;
-  --bg2: #111318;
-  --bg3: #181c24;
-  --bg4: #1e2330;
+  --bg2: #0f1218;
+  --bg3: #151a22;
+  --bg4: #1a2030;
   --teal: #00c9b1;
-  --teal-dim: rgba(0,201,177,0.12);
-  --teal-mid: rgba(0,201,177,0.25);
   --red: #ff4757;
-  --red-dim: rgba(255,71,87,0.12);
   --gold: #ffc048;
-  --gold-dim: rgba(255,192,72,0.12);
   --blue: #4facfe;
-  --blue-dim: rgba(79,172,254,0.12);
   --purple: #a78bfa;
-  --purple-dim: rgba(167,139,250,0.12);
   --green: #10b981;
-  --green-dim: rgba(16,185,129,0.12);
+  --orange: #f97316;
   --text: #e2e8f0;
-  --text-dim: #8892a4;
-  --text-dimmer: #4a5568;
+  --muted: #64748b;
   --border: rgba(255,255,255,0.07);
-  --border-bright: rgba(255,255,255,0.12);
-  --mono: 'Share Tech Mono', monospace;
-  --sans: 'Barlow', sans-serif;
-  --cond: 'Barlow Condensed', sans-serif;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-html, body {
+body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--sans);
-  font-size: 14px;
-  line-height: 1.5;
+  font-family: 'Barlow', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* ── APP SHELL ── */
-#app { display: flex; flex-direction: column; min-height: 100vh; }
-
-/* ── HEADER ── */
-.app-header {
-  position: sticky; top: 0; z-index: 100;
+/* NAV */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
   background: rgba(10,12,16,0.95);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
-  padding: env(safe-area-inset-top, 0) 0 0;
+  z-index: 100;
+  padding: 0 16px;
 }
-.header-inner {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 16px;
+
+.nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
 }
-.header-logo {
-  font-family: var(--cond);
-  font-size: 18px; font-weight: 700;
-  letter-spacing: 0.08em;
+
+.nav-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--teal);
 }
-.header-logo span { color: var(--text-dim); font-weight: 400; }
-.header-badge {
-  margin-left: auto;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text-dimmer);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 2px 6px;
+
+.nav-subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-/* ── NAV TABS ── */
-.nav-tabs {
-  display: flex; overflow-x: auto; gap: 0;
-  padding: 0 8px 0;
-  scrollbar-width: none;
-  border-top: 1px solid var(--border);
+.menu-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 16px;
 }
-.nav-tabs::-webkit-scrollbar { display: none; }
-.nav-tab {
-  flex-shrink: 0;
-  font-family: var(--cond);
-  font-size: 11px; font-weight: 600;
+
+/* SIDEBAR */
+.sidebar {
+  position: fixed;
+  top: 52px; bottom: 0; left: -280px;
+  width: 280px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  z-index: 99;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+  padding: 16px 0;
+}
+
+.sidebar.open { left: 0; }
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 98;
+  display: none;
+}
+.sidebar-overlay.open { display: block; }
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-left: 3px solid transparent;
+}
+.sidebar-item:hover { background: var(--bg3); }
+.sidebar-item.active {
+  background: var(--bg3);
+  border-left-color: var(--teal);
+}
+.sidebar-item .icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+.sidebar-item .label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--text-dimmer);
-  padding: 8px 14px;
-  border: none; background: none;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
-  white-space: nowrap;
+  color: var(--text);
 }
-.nav-tab:hover { color: var(--text-dim); }
-.nav-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
-
-/* ── CONTENT ── */
-.content { flex: 1; padding: 16px; padding-bottom: calc(env(safe-area-inset-bottom, 0) + 20px); }
-.module { display: none; }
-.module.active { display: block; animation: fadeIn 0.2s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-
-/* ── SECTION HEADERS ── */
-.section-header {
-  display: flex; align-items: center; gap: 10px;
-  margin: 0 0 14px;
+.sidebar-item .sublabel {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 1px;
 }
-.section-icon {
-  width: 32px; height: 32px;
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 15px;
-  flex-shrink: 0;
+.sidebar-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 8px 20px;
 }
-.section-title {
-  font-family: var(--cond);
-  font-size: 16px; font-weight: 700;
-  letter-spacing: 0.05em;
+.sidebar-section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
+  color: var(--muted);
+  padding: 12px 20px 4px;
 }
-.section-sub { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
 
-/* ── CARDS ── */
+/* MAIN */
+.main {
+  padding-top: 52px;
+  min-height: 100vh;
+}
+
+/* PAGES */
+.page { display: none; padding: 20px 16px 80px; }
+.page.active { display: block; }
+
+/* PAGE HEADER */
+.page-header {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.page-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.page-desc {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 0.08em;
+}
+
+/* SECTION */
+.section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 20px 0 10px;
+}
+
+/* CARDS */
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  margin-bottom: 12px;
-  overflow: hidden;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
 }
-.card-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 14px;
-  cursor: pointer;
-  user-select: none;
-  gap: 10px;
-}
-.card-header:hover { background: var(--bg3); }
-.card-title {
-  font-family: var(--cond);
-  font-size: 13px; font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-.card-chevron {
-  color: var(--text-dimmer);
-  font-size: 12px;
-  transition: transform 0.25s;
-  flex-shrink: 0;
-}
-.card.open .card-chevron { transform: rotate(180deg); }
-.card-body { display: none; padding: 0 14px 14px; }
-.card.open .card-body { display: block; }
 
-/* ── CHECKLIST ITEMS ── */
+/* CHECKLIST */
 .check-item {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 8px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
   border-bottom: 1px solid var(--border);
+  cursor: pointer;
 }
 .check-item:last-child { border-bottom: none; }
-.check-wrap { flex-shrink: 0; padding-top: 1px; }
+
 .check-box {
-  width: 18px; height: 18px;
-  border: 2px solid var(--text-dimmer);
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--muted);
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
 }
-.check-box.checked {
+.check-item.checked .check-box {
   background: var(--teal);
   border-color: var(--teal);
 }
-.check-box.checked::after { content: '✓'; color: #000; font-size: 11px; font-weight: 700; }
-.check-content { flex: 1; min-width: 0; }
-.check-label { font-size: 13px; font-weight: 500; }
-.check-box.checked ~ .check-content .check-label { text-decoration: line-through; color: var(--text-dimmer); }
-.check-meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
-.check-note {
-  display: inline-block; margin-top: 4px;
-  font-family: var(--mono); font-size: 10px;
-  color: var(--teal); background: var(--teal-dim);
-  border-radius: 4px; padding: 2px 6px;
+.check-item.checked .check-box::after {
+  content: '✓';
+  color: #000;
+  font-size: 12px;
+  font-weight: 900;
+}
+.check-item.checked .check-label {
+  color: var(--muted);
+  text-decoration: line-through;
 }
 
-/* ── CATEGORY TAGS ── */
-.tag {
-  display: inline-flex; align-items: center;
-  font-family: var(--cond); font-size: 10px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  padding: 2px 7px; border-radius: 4px;
-  margin-right: 4px; margin-bottom: 2px;
+.check-content { flex: 1; }
+.check-label {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
 }
-.tag-m { background: var(--blue-dim); color: var(--blue); }
-.tag-s { background: var(--red-dim); color: var(--red); }
-.tag-a { background: var(--teal-dim); color: var(--teal); }
-.tag-i { background: var(--purple-dim); color: var(--purple); }
-.tag-d { background: var(--gold-dim); color: var(--gold); }
-.tag-mon { background: var(--green-dim); color: var(--green); }
+.check-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+  font-family: 'Share Tech Mono', monospace;
+}
 
-/* ── PIMP QA ── */
-.pimp-item {
+/* CATEGORY BADGES */
+.badge {
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 3px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.badge-m { background: rgba(79,172,254,0.15); color: var(--blue); }
+.badge-s { background: rgba(255,71,87,0.15); color: var(--red); }
+.badge-a { background: rgba(0,201,177,0.15); color: var(--teal); }
+.badge-i { background: rgba(255,192,72,0.15); color: var(--gold); }
+.badge-d { background: rgba(167,139,250,0.15); color: var(--purple); }
+
+/* RESET BTN */
+.reset-btn {
+  background: rgba(255,71,87,0.1);
+  border: 1px solid rgba(255,71,87,0.3);
+  color: var(--red);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  float: right;
+  margin-top: -4px;
+}
+
+/* PROGRESS */
+.progress-bar {
+  height: 4px;
   background: var(--bg3);
+  border-radius: 2px;
+  margin: 12px 0 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--teal);
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+.progress-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* PIMP Q&A */
+.pimp-item {
+  background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 10px;
   margin-bottom: 8px;
   overflow: hidden;
 }
 .pimp-q {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 10px 12px;
+  padding: 14px 16px;
   cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
-.pimp-q:hover { background: var(--bg4); }
 .pimp-icon {
-  font-size: 14px; flex-shrink: 0; padding-top: 1px;
-  color: var(--gold);
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
 }
-.pimp-question { font-size: 13px; font-weight: 500; flex: 1; }
-.pimp-toggle {
-  font-family: var(--mono); font-size: 10px;
-  color: var(--text-dimmer);
-  flex-shrink: 0; padding-top: 2px;
+.pimp-question {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  flex: 1;
 }
-.pimp-answer {
+.pimp-chevron {
+  color: var(--muted);
+  font-size: 12px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: transform 0.2s;
+}
+.pimp-item.open .pimp-chevron { transform: rotate(90deg); }
+.pimp-a {
   display: none;
-  padding: 10px 12px 12px 36px;
-  font-size: 12px; line-height: 1.6;
-  color: var(--text-dim);
+  padding: 0 16px 14px 42px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
   border-top: 1px solid var(--border);
+  padding-top: 12px;
 }
-.pimp-item.open .pimp-answer { display: block; }
-.pimp-item.open .pimp-toggle { color: var(--teal); }
+.pimp-item.open .pimp-a { display: block; }
 
-/* ── TABLES ── */
-.ref-table {
-  width: 100%; border-collapse: collapse;
-  font-size: 12px; margin-top: 8px;
+/* QUICK REF GRID */
+.ref-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
-.ref-table th {
-  font-family: var(--cond); font-size: 10px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--text-dimmer);
-  padding: 6px 8px; text-align: left;
+.ref-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.ref-card-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.ref-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.ref-row:last-child { border-bottom: none; }
+.ref-key { color: var(--muted); }
+.ref-val { font-weight: 600; font-family: 'Share Tech Mono', monospace; font-size: 11px; }
+
+/* ALERT */
+.alert {
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  border-left: 3px solid;
+}
+.alert-red { background: rgba(255,71,87,0.08); border-color: var(--red); color: var(--text); }
+.alert-gold { background: rgba(255,192,72,0.08); border-color: var(--gold); }
+.alert-teal { background: rgba(0,201,177,0.08); border-color: var(--teal); }
+
+.alert-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+/* DRUG TABLE */
+.drug-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-top: 8px;
+}
+.drug-table th {
+  background: var(--bg3);
+  padding: 6px 8px;
+  text-align: left;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
   border-bottom: 1px solid var(--border);
 }
-.ref-table td {
-  padding: 8px 8px;
+.drug-table td {
+  padding: 7px 8px;
   border-bottom: 1px solid var(--border);
   vertical-align: top;
+  line-height: 1.4;
 }
-.ref-table tr:last-child td { border-bottom: none; }
-.ref-table tr:hover td { background: var(--bg3); }
+.drug-table tr:last-child td { border-bottom: none; }
+.drug-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+.drug-name { font-weight: 700; color: var(--teal); }
 
-/* ── ALERT BANNERS ── */
-.alert {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  font-size: 12px; line-height: 1.5;
-}
-.alert-red { background: var(--red-dim); border: 1px solid rgba(255,71,87,0.25); }
-.alert-gold { background: var(--gold-dim); border: 1px solid rgba(255,192,72,0.25); }
-.alert-teal { background: var(--teal-dim); border: 1px solid rgba(0,201,177,0.25); }
-.alert-icon { flex-shrink: 0; font-size: 14px; }
-
-/* ── PROGRESS BAR ── */
-.progress-bar {
-  background: var(--bg3); border-radius: 999px;
-  height: 4px; margin: 6px 0 12px;
+/* FULL WIDTH CARD */
+.full-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
   overflow: hidden;
+  margin-bottom: 8px;
 }
-.progress-fill {
-  height: 100%; background: var(--teal);
-  border-radius: 999px;
-  transition: width 0.4s ease;
+.full-card-header {
+  padding: 12px 16px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
+.full-card-body { padding: 14px 16px; }
 
-/* ── MODULE HERO ── */
-.module-hero {
-  background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
+/* STATUS PILL */
+.status-pill {
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.1em;
+}
+.pill-pending { background: rgba(100,116,139,0.2); color: var(--muted); }
+.pill-ok { background: rgba(16,185,129,0.15); color: var(--green); }
+.pill-warn { background: rgba(255,192,72,0.15); color: var(--gold); }
+.pill-fail { background: rgba(255,71,87,0.15); color: var(--red); }
+
+/* TABS inside page */
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.tab-btn.active { background: var(--teal); color: #000; border-color: var(--teal); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* HOME */
+.home-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.home-card {
+  background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 16px;
-  margin-bottom: 16px;
-}
-.module-hero-title {
-  font-family: var(--cond); font-size: 22px; font-weight: 700;
-  letter-spacing: 0.05em; text-transform: uppercase;
-  color: var(--teal);
-}
-.module-hero-sub { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
-
-/* ── STAT GRID ── */
-.stat-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 8px; margin-bottom: 12px;
-}
-.stat-card {
-  background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 8px; padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
   text-align: center;
 }
-.stat-val {
-  font-family: var(--mono); font-size: 18px;
-  color: var(--teal);
-}
-.stat-label { font-size: 10px; color: var(--text-dimmer); margin-top: 2px; }
-
-/* ── DRUG PILL ── */
-.drug-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
-.drug-pill {
-  font-family: var(--mono); font-size: 11px;
-  padding: 3px 9px; border-radius: 99px;
-  border: 1px solid var(--border-bright);
-  color: var(--text-dim);
-}
-
-/* ── NPO TABLE ── */
-.npo-row {
-  display: flex; align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-  gap: 12px;
-}
-.npo-row:last-child { border-bottom: none; }
-.npo-time {
-  font-family: var(--mono); font-size: 14px; font-weight: 700;
-  color: var(--teal); min-width: 48px;
-}
-.npo-label { font-size: 13px; flex: 1; }
-.npo-flag { font-size: 10px; color: var(--red); font-family: var(--cond); font-weight: 700; }
-
-/* ── MALLAMPATI VISUAL ── */
-.mp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 8px 0; }
-.mp-card {
-  background: var(--bg3); border-radius: 8px; padding: 10px;
-  border-left: 3px solid var(--text-dimmer);
-}
-.mp-card.mp-1 { border-color: var(--green); }
-.mp-card.mp-2 { border-color: var(--teal); }
-.mp-card.mp-3 { border-color: var(--gold); }
-.mp-card.mp-4 { border-color: var(--red); }
-.mp-class {
-  font-family: var(--mono); font-size: 11px; font-weight: 700;
-  margin-bottom: 4px;
-}
-.mp-desc { font-size: 11px; color: var(--text-dim); }
-
-/* ── HARD STOP ── */
-.hardstop-item {
-  display: flex; align-items: flex-start; gap: 8px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
+.home-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-1px); }
+.home-card .hc-icon { font-size: 28px; margin-bottom: 8px; }
+.home-card .hc-title {
+  font-family: 'Barlow Condensed', sans-serif;
   font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
 }
-.hardstop-item:last-child { border-bottom: none; }
-.hardstop-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--red); flex-shrink: 0; margin-top: 4px;
-}
+.home-card .hc-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
 
-/* ── LEMON ROW ── */
-.lemon-row {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 9px 0; border-bottom: 1px solid var(--border);
-}
-.lemon-row:last-child { border-bottom: none; }
-.lemon-letter {
-  font-family: var(--mono); font-size: 13px; font-weight: 700;
-  color: var(--gold); min-width: 28px;
-}
-.lemon-content { flex: 1; }
-.lemon-label { font-size: 13px; font-weight: 600; }
-.lemon-detail { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+.home-card.c-teal { border-top: 2px solid var(--teal); }
+.home-card.c-blue { border-top: 2px solid var(--blue); }
+.home-card.c-gold { border-top: 2px solid var(--gold); }
+.home-card.c-red { border-top: 2px solid var(--red); }
+.home-card.c-purple { border-top: 2px solid var(--purple); }
+.home-card.c-green { border-top: 2px solid var(--green); }
 
-/* ── MED ROW ── */
-.med-row {
-  padding: 9px 0; border-bottom: 1px solid var(--border);
+@media (max-width: 380px) {
+  .ref-grid { grid-template-columns: 1fr; }
+  .home-grid { grid-template-columns: 1fr; }
 }
-.med-row:last-child { border-bottom: none; }
-.med-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-.med-action {
-  display: inline-block;
-  font-family: var(--cond); font-size: 10px; font-weight: 700;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  padding: 1px 6px; border-radius: 4px;
-  margin-right: 6px;
-}
-.action-cont { background: var(--green-dim); color: var(--green); }
-.action-hold { background: var(--red-dim); color: var(--red); }
-.action-reduce { background: var(--gold-dim); color: var(--gold); }
-.action-case { background: var(--blue-dim); color: var(--blue); }
-.action-spec { background: var(--purple-dim); color: var(--purple); }
-.med-implication { font-size: 11px; color: var(--text-dim); margin-top: 3px; }
-
-/* ── ALLERGY ROW ── */
-.allergy-row {
-  padding: 9px 0; border-bottom: 1px solid var(--border);
-}
-.allergy-row:last-child { border-bottom: none; }
-.allergy-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
-.allergy-action { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
-
-/* ── FLUID CALC ── */
-.fluid-box {
-  background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 8px; padding: 12px; margin-bottom: 8px;
-}
-.fluid-title {
-  font-family: var(--cond); font-size: 11px; font-weight: 700;
-  letter-spacing: 0.07em; text-transform: uppercase;
-  color: var(--text-dimmer); margin-bottom: 8px;
-}
-.fluid-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 5px 0; border-bottom: 1px solid var(--border);
-  font-size: 12px;
-}
-.fluid-row:last-child { border-bottom: none; }
-.fluid-val { font-family: var(--mono); color: var(--teal); }
-
-/* ── RESET BTN ── */
-.reset-btn {
-  display: flex; align-items: center; gap: 6px;
-  background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 8px; padding: 8px 14px;
-  font-family: var(--cond); font-size: 12px; font-weight: 600;
-  letter-spacing: 0.05em; text-transform: uppercase;
-  color: var(--text-dim); cursor: pointer;
-  transition: all 0.2s; width: 100%; justify-content: center;
-  margin-top: 12px;
-}
-.reset-btn:hover { background: var(--bg4); border-color: var(--border-bright); color: var(--text); }
-
-/* ── CONDITION SELECTOR ── */
-.cond-system {
-  font-family: var(--cond); font-size: 11px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--text-dimmer);
-  padding: 8px 0 4px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 4px;
-}
-.cond-row {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.cond-row:last-child { border-bottom: none; }
-.cond-check {
-  width: 16px; height: 16px;
-  border: 2px solid var(--text-dimmer);
-  border-radius: 3px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; margin-top: 2px;
-  transition: all 0.15s;
-}
-.cond-check.checked { background: var(--teal); border-color: var(--teal); }
-.cond-check.checked::after { content: '✓'; color: #000; font-size: 10px; font-weight: 700; }
-.cond-content { flex: 1; }
-.cond-name { font-size: 13px; font-weight: 500; }
-.cond-implication { font-size: 11px; color: var(--text-dim); margin-top: 2px; line-height: 1.4; }
-.cond-selected-badge {
-  font-family: var(--mono); font-size: 10px;
-  color: var(--teal); background: var(--teal-dim);
-  border-radius: 4px; padding: 1px 5px;
-  margin-left: 6px;
-}
-
-/* ── ACTIVE SUMMARY ── */
-.active-summary {
-  background: var(--bg2); border: 1px solid var(--teal-mid);
-  border-radius: 10px; padding: 12px; margin-bottom: 14px;
-}
-.active-summary-title {
-  font-family: var(--cond); font-size: 11px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--teal); margin-bottom: 8px;
-  display: flex; align-items: center; gap: 6px;
-}
-.active-count {
-  background: var(--teal); color: #000;
-  font-family: var(--mono); font-size: 10px; font-weight: 700;
-  border-radius: 99px; padding: 1px 7px;
-}
-.active-list { font-size: 12px; color: var(--text-dim); line-height: 1.7; }
-.active-list:empty::after { content: 'None selected'; color: var(--text-dimmer); font-style: italic; }
-
-/* ── QUICK REF GRID ── */
-.qr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-.qr-card {
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 10px; padding: 12px;
-}
-.qr-label {
-  font-family: var(--cond); font-size: 10px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--text-dimmer); margin-bottom: 6px;
-}
-.qr-val {
-  font-family: var(--mono); font-size: 14px;
-  color: var(--teal);
-}
-.qr-note { font-size: 11px; color: var(--text-dim); margin-top: 3px; }
-
-/* ── ASA ROWS ── */
-.asa-row {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 8px 0; border-bottom: 1px solid var(--border);
-}
-.asa-row:last-child { border-bottom: none; }
-.asa-class {
-  font-family: var(--mono); font-size: 13px; font-weight: 700;
-  min-width: 54px;
-}
-.asa-i .asa-class { color: var(--green); }
-.asa-ii .asa-class { color: var(--teal); }
-.asa-iii .asa-class { color: var(--gold); }
-.asa-iv .asa-class { color: var(--red); }
-.asa-v .asa-class { color: var(--red); }
-.asa-vi .asa-class { color: var(--purple); }
-.asa-e .asa-class { color: var(--blue); }
-.asa-desc { font-size: 12px; flex: 1; }
-
-/* ── MEDS REMINDER ── */
-.reminder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.reminder-card {
-  background: var(--bg3); border-radius: 8px; padding: 10px;
-  border-left: 3px solid var(--text-dimmer);
-}
-.reminder-card.cont { border-color: var(--green); }
-.reminder-card.hold { border-color: var(--red); }
-.reminder-card.reduce { border-color: var(--gold); }
-.reminder-card.case { border-color: var(--blue); }
-.reminder-name { font-size: 11px; font-weight: 600; margin-bottom: 2px; }
-.reminder-note { font-size: 10px; color: var(--text-dim); }
-
-/* ── BETWEEN CASE ── */
-.step-item {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 8px 0; border-bottom: 1px solid var(--border);
-}
-.step-item:last-child { border-bottom: none; }
-.step-num {
-  font-family: var(--mono); font-size: 11px;
-  color: var(--text-dimmer);
-  min-width: 22px;
-}
-.step-text { font-size: 13px; flex: 1; }
-
 </style>
 </head>
 <body>
-<div id="app">
 
-<!-- ── HEADER ── -->
-<header class="app-header">
-  <div class="header-inner">
-    <div class="header-logo">⚕ CRNA <span>Clinical Ref</span></div>
-    <div class="header-badge">Dräger Fabius GS</div>
-  </div>
-  <nav class="nav-tabs">
-    <button class="nav-tab active" onclick="showModule('machine')">Machine</button>
-    <button class="nav-tab" onclick="showModule('preop')">Pre-op</button>
-    <button class="nav-tab" onclick="showModule('quickref')">Quick Ref</button>
-    <button class="nav-tab" onclick="showModule('medhx')">Med Hx</button>
-    <button class="nav-tab" onclick="showModule('sxhx')">Surg Hx</button>
-    <button class="nav-tab" onclick="showModule('allergies')">Allergies</button>
-  </nav>
-</header>
-
-<!-- ── CONTENT ── -->
-<main class="content">
-
-<!-- ═══════════════════════════════════════ MODULE 1: MACHINE ═══ -->
-<div class="module active" id="module-machine">
-
-  <div class="module-hero">
-    <div class="module-hero-title">Machine Setup &amp; Check</div>
-    <div class="module-hero-sub">Dräger Fabius GS · MS MAIDS · ASA 15-Point PAC · Between-Case</div>
-    <div class="progress-bar" style="margin-top:10px">
-      <div class="progress-fill" id="machine-progress" style="width:0%"></div>
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-header">
+    <div>
+      <div class="nav-title">⚕ Anesthesia Ref</div>
+      <div class="nav-subtitle">SRNA · Dräger Fabius GS</div>
     </div>
-    <div style="font-family:var(--mono);font-size:10px;color:var(--text-dimmer)" id="machine-progress-label">0 / 25 complete</div>
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+  </div>
+</nav>
+
+<!-- SIDEBAR -->
+<div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-section-label">Navigation</div>
+  <div class="sidebar-item active" onclick="showPage('home')">
+    <span class="icon">🏠</span>
+    <div><div class="label">Home</div><div class="sublabel">Dashboard</div></div>
+  </div>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section-label">Clinical Modules</div>
+  <div class="sidebar-item" onclick="showPage('machine')">
+    <span class="icon">⚙️</span>
+    <div><div class="label">Machine Setup</div><div class="sublabel">MS MAIDS · ASA 15-point</div></div>
+  </div>
+  <div class="sidebar-item" onclick="showPage('preop')">
+    <span class="icon">📋</span>
+    <div><div class="label">Pre-op Assessment</div><div class="sublabel">Airway · Meds · Plan</div></div>
+  </div>
+  <div class="sidebar-item" onclick="showPage('induction')">
+    <span class="icon">💉</span>
+    <div><div class="label">Induction</div><div class="sublabel">Non-RSI · RSI</div></div>
+  </div>
+  <div class="sidebar-item" onclick="showPage('emergence')">
+    <span class="icon">🫁</span>
+    <div><div class="label">Emergence</div><div class="sublabel">Extubation criteria</div></div>
+  </div>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section-label">Reference</div>
+  <div class="sidebar-item" onclick="showPage('quickref')">
+    <span class="icon">⚡</span>
+    <div><div class="label">Quick Reference</div><div class="sublabel">NPO · ASA · Mallampati</div></div>
+  </div>
+  <div class="sidebar-item" onclick="showPage('emergency')">
+    <span class="icon">🚨</span>
+    <div><div class="label">Emergency Protocols</div><div class="sublabel">MH · LAST · Anaphylaxis</div></div>
+  </div>
+  <div class="sidebar-item" onclick="showPage('drugs')">
+    <span class="icon">💊</span>
+    <div><div class="label">Drug Reference</div><div class="sublabel">Doses · MOA · Pearls</div></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <div class="page-header">
+    <div class="page-title" style="color:var(--teal)">Good morning, Brittany</div>
+    <div class="page-desc">SRNA · NMSU · Clinical Year 2026</div>
+  </div>
+
+  <div class="home-grid">
+    <div class="home-card c-teal" onclick="showPage('machine')">
+      <div class="hc-icon">⚙️</div>
+      <div class="hc-title">Machine Setup</div>
+      <div class="hc-sub">MS MAIDS + ASA checklist</div>
+    </div>
+    <div class="home-card c-blue" onclick="showPage('preop')">
+      <div class="hc-icon">📋</div>
+      <div class="hc-title">Pre-op</div>
+      <div class="hc-sub">Assessment + plan</div>
+    </div>
+    <div class="home-card c-gold" onclick="showPage('induction')">
+      <div class="hc-icon">💉</div>
+      <div class="hc-title">Induction</div>
+      <div class="hc-sub">RSI + Non-RSI</div>
+    </div>
+    <div class="home-card c-purple" onclick="showPage('emergence')">
+      <div class="hc-icon">🫁</div>
+      <div class="hc-title">Emergence</div>
+      <div class="hc-sub">Extubation criteria</div>
+    </div>
+    <div class="home-card c-red" onclick="showPage('emergency')">
+      <div class="hc-icon">🚨</div>
+      <div class="hc-title">Emergency</div>
+      <div class="hc-sub">MH · LAST · Anaphylaxis</div>
+    </div>
+    <div class="home-card c-green" onclick="showPage('quickref')">
+      <div class="hc-icon">⚡</div>
+      <div class="hc-title">Quick Ref</div>
+      <div class="hc-sub">NPO · ASA · Drugs</div>
+    </div>
+  </div>
+
+  <div class="section-label">Hard Stop Criteria</div>
+  <div class="alert alert-red">
+    <div class="alert-title">🔴 Delay Surgery If Any Present</div>
+    Acute intoxication (any substance) · Cocaine use today · Active withdrawal · Unstable vitals (tachy/HTN/AMS) · Uncontrolled coagulopathy with neuraxial · Platelets &lt;50k with neuraxial · MH family hx without TIVA plan · Acute respiratory infection with fever/hypoxia · Glucose &lt;70 · Decompensated CHF
+  </div>
+
+  <div class="section-label">Machine · Dräger Fabius GS</div>
+  <div class="alert alert-teal">
+    <div class="alert-title">MS MAIDS Framework</div>
+    <strong>M</strong>achine · <strong>S</strong>uction · <strong>A</strong>irway · <strong>I</strong>V/Infusion · <strong>D</strong>rugs · <strong>S</strong>monitors
+  </div>
+</div>
+
+<!-- MACHINE SETUP PAGE -->
+<div class="page" id="page-machine">
+  <div class="page-header">
+    <div class="page-title" style="color:var(--teal)">Machine Setup</div>
+    <div class="page-desc">Dräger Fabius GS · MS MAIDS · ASA 15-Point</div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('machine','msmaids')">MS MAIDS</button>
+    <button class="tab-btn" onclick="switchTab('machine','asa15')">ASA 15-Point</button>
+    <button class="tab-btn" onclick="switchTab('machine','between')">Between Cases</button>
+    <button class="tab-btn" onclick="switchTab('machine','pimps')">Pimp Q&A</button>
   </div>
 
   <!-- MS MAIDS -->
-  <div class="card open" id="card-msmaids">
-    <div class="card-header" onclick="toggleCard('card-msmaids')">
-      <div>
-        <div class="card-title">MS MAIDS Framework</div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:2px">Pre-anesthesia setup checklist</div>
-      </div>
-      <span class="card-chevron">▼</span>
+  <div class="tab-content active" id="machine-msmaids">
+    <div class="section-label">
+      MS MAIDS Pre-Anesthesia Check
+      <button class="reset-btn" onclick="resetChecklist('msmaids')">Reset</button>
     </div>
-    <div class="card-body">
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
-        <span class="tag tag-m">M Machine</span>
-        <span class="tag tag-s">S Suction</span>
-        <span class="tag tag-a">A Airway</span>
-        <span class="tag tag-i">I IV</span>
-        <span class="tag tag-d">D Drugs</span>
-        <span class="tag tag-mon">S Monitors</span>
+    <div class="progress-bar"><div class="progress-fill" id="msmaids-progress" style="width:0%"></div></div>
+    <div class="progress-text" id="msmaids-text">0 / 24 complete</div>
+    <div class="card" id="checklist-msmaids">
+
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);padding:6px 0 4px;">M — Machine</div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Anesthesia machine power on</div>
+          <div class="check-sub">Powered, display active</div>
+        </div>
       </div>
-      <div id="msmaids-list"></div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Flow meters (O₂, Air, N₂O) functional</div>
+          <div class="check-sub">All floats move freely, no leak</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Vaporizer filled, locked, not tilted</div>
+          <div class="check-sub">Adequate agent level confirmed</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">O₂ flush valve functional</div>
+          <div class="check-sub">Flow increases with flush</div>
+        </div>
+      </div>
+
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);padding:10px 0 4px;">S — Suction</div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Suction tubing connected & functional</div>
+          <div class="check-sub">≥300 mmHg negative pressure</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Yankauer & suction catheter present</div>
+          <div class="check-sub">Within reach</div>
+        </div>
+      </div>
+
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);padding:10px 0 4px;">A — Airway</div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Face mask & oral/nasal airways in place</div>
+          <div class="check-sub">Multiple sizes available</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">LMA checked & available (backup)</div>
+          <div class="check-sub">Cuff checked, lubricated</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">ETT verified (cuff check + stylet)</div>
+          <div class="check-sub">Cuff holds, stylet curved</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Video laryngoscope available & charged</div>
+          <div class="check-sub">Blade clean, camera functional</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Difficult airway cart accessible</div>
+          <div class="check-sub">Cart present in room</div>
+        </div>
+      </div>
+
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);padding:10px 0 4px;">I — IV / Infusion</div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">IV access confirmed patent</div>
+          <div class="check-sub">Flushes without resistance</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">IV fluids & tubing primed</div>
+          <div class="check-sub">No air in line</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Infusion pumps programmed if needed</div>
+          <div class="check-sub">Rates confirmed</div>
+        </div>
+      </div>
+
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);padding:10px 0 4px;">D — Drugs</div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Induction agents drawn & labeled</div>
+          <div class="check-sub">Propofol / Etomidate ready</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Paralytics drawn & labeled</div>
+          <div class="check-sub">Succinylcholine / Rocuronium ready</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Reversal agents available</div>
+          <div class="check-sub">Neostigmine / Sugammadex</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Emergency drugs immediately available</div>
+          <div class="check-sub">Epi, Atropine, Vasopressors</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Volatile agent confirmed in vaporizer</div>
+          <div class="check-sub">Agent ID matches vaporizer label</div>
+        </div>
+      </div>
+
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);padding:10px 0 4px;">S — Monitors</div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">SpO₂ probe on patient & reading</div>
+          <div class="check-sub">Good waveform</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">EKG leads connected, rhythm visible</div>
+          <div class="check-sub">Lead II minimum</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">ETCO₂ sampling line connected</div>
+          <div class="check-sub">Ready for waveform</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">BP cuff sized and functional</div>
+          <div class="check-sub">First reading obtained</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'msmaids')">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-label">Temperature probe in place (if applicable)</div>
+          <div class="check-sub">Esophageal / skin sensor</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- ASA 15-Point -->
-  <div class="card" id="card-asa15">
-    <div class="card-header" onclick="toggleCard('card-asa15')">
-      <div>
-        <div class="card-title">ASA 15-Point Pre-Anesthesia Check</div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:2px">Formal checklist — complete before every case</div>
-      </div>
-      <span class="card-chevron">▼</span>
+  <!-- ASA 15 -->
+  <div class="tab-content" id="machine-asa15">
+    <div class="section-label">
+      ASA 15-Point Pre-Anesthesia Checklist
+      <button class="reset-btn" onclick="resetChecklist('asa15')">Reset</button>
     </div>
-    <div class="card-body">
-      <div id="asa15-list"></div>
-    </div>
-  </div>
-
-  <!-- Between Case -->
-  <div class="card" id="card-betweencase">
-    <div class="card-header" onclick="toggleCard('card-betweencase')">
-      <div>
-        <div class="card-title">Between-Case Protocol</div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:2px">Turnover steps before next patient</div>
-      </div>
-      <span class="card-chevron">▼</span>
-    </div>
-    <div class="card-body">
-      <div id="betweencase-list"></div>
-    </div>
-  </div>
-
-  <!-- Pimp QA -->
-  <div class="card open" id="card-machine-pimp">
-    <div class="card-header" onclick="toggleCard('card-machine-pimp')">
-      <div>
-        <div class="card-title">⚡ Pimp Q&amp;A</div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:2px">Machine setup — OR-ready answers</div>
-      </div>
-      <span class="card-chevron">▼</span>
-    </div>
-    <div class="card-body">
-      <div id="machine-pimp-list"></div>
+    <div class="progress-bar"><div class="progress-fill" id="asa15-progress" style="width:0%"></div></div>
+    <div class="progress-text" id="asa15-text">0 / 15 complete</div>
+    <div class="card" id="checklist-asa15">
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">1. Final patient / procedure ID verification</div><div class="check-sub">Confirmed with patient</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">2. Machine power & displays active</div><div class="check-sub">All screens live</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">3. High-pressure O₂ source checked</div><div class="check-sub">≥1000 PSI wall / full cylinder</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">4. Low-pressure O₂ leak test passed</div><div class="check-sub">No leaks detected</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">5. Flow meters functional (all gases)</div><div class="check-sub">O₂, Air, N₂O smooth</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">6. Vaporizer filled, sealed, not tipped</div><div class="check-sub">Adequate level</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">7. Breathing circuit leak test passed</div><div class="check-sub">&lt;300 mL/min at 30 cmH₂O</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">8. APL valve functional (manual & auto)</div><div class="check-sub">Vents appropriately in both modes</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">9. CO₂ absorber — color fresh</div><div class="check-sub">Purple/white = fresh · Purple = exhausted</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">10. Ventilator: tidal volume & rate confirmed</div><div class="check-sub">TV 6–8 mL/kg IBW</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">11. Suction functional (≥300 mmHg)</div><div class="check-sub">Yankauer & suction catheter present</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">12. Airway equipment ready</div><div class="check-sub">Masks, ETTs, LMA, VL, FOB — all sizes</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">13. Monitors connected & reading</div><div class="check-sub">SpO₂, EKG, ETCO₂, BP — all baseline</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">14. IV access patent, fluids connected</div><div class="check-sub">Flushes freely</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'asa15')"><div class="check-box"></div><div class="check-content"><div class="check-label">15. Emergency drugs available & labeled</div><div class="check-sub">Epi, Atropine, Vasopressors</div></div></div>
     </div>
   </div>
 
-  <button class="reset-btn" onclick="resetModule('machine')">↺ Reset all machine checklists</button>
+  <!-- BETWEEN CASES -->
+  <div class="tab-content" id="machine-between">
+    <div class="section-label">
+      Between-Case Protocol
+      <button class="reset-btn" onclick="resetChecklist('between')">Reset</button>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="between-progress" style="width:0%"></div></div>
+    <div class="progress-text" id="between-text">0 / 12 complete</div>
+    <div class="card" id="checklist-between">
+      <div class="check-item" onclick="toggleCheck(this,'between')"><div class="check-box"></div><div class="check-content"><div class="check-label">Dispose of sharps & contaminated items</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'between')"><div class="check-box"></div><div class="check-content"><div class="check-label">Remove and dispose of ETT, LMA, breathing circuit</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'between')"><div class="check-box"></div><div class="check-content"><div class="check-label">Wipe down machine with approved disinfectant</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'between')"><div class="check-box"></div><div class="check-content"><div class="check-label">Restock drugs (induction, paralytics, analgesics)</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'between')"><div class="check-box"></div><div class="check-content"><div class="check-label">Restock airway equipment</div><div class="check-sub">ETTs, LMA, oral airways, masks</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'between')"><div class="check-box"></div><div class="check-content"><div class="check-label">Prime new IV tubing if needed</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'between')"><div class="check-box"></div><div class="check-content"><div class="check-label">Reset ventilator settings to defaults</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'between')"><div class="check-box"></div><div class="check-content"><div class="check-label">Replace CO₂ absorber if exhausted</div><div class="check-sub">Check color — purple = change</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'between')"><div class="check-box"></div><div class="check-content"><div class="check-label">Reset monitoring leads & probes</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'between')"><div class="check-box"></div><div class="check-content"><div class="check-label">Update medication log & document case</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'between')"><div class="check-box"></div><div class="check-content"><div class="check-label">Confirm next patient ID, procedure & special needs</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'between')"><div class="check-box"></div><div class="check-content"><div class="check-label">Complete circuit leak test for next case</div></div></div>
+    </div>
+  </div>
+
+  <!-- PIMP Q&A -->
+  <div class="tab-content" id="machine-pimps">
+    <div class="section-label">Machine Setup — Pimp Q&A</div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">What pressure indicates the O₂ cylinder is full?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">2000 PSI = full. Below 500 PSI → change cylinder. Wall supply should read ≥50 PSI. Always check both pipeline and cylinder sources at the start of every case.</div>
+    </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">What is the significance of a failed circuit leak test?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">Indicates a leak in the breathing system — patient may receive sub-therapeutic gas concentrations and desaturate. Find the leak source (connections, ETT, vaporizer filler cap, CO₂ absorber) before proceeding. Never bypass this test.</div>
+    </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">Why check CO₂ absorber color?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">Purple = exhausted (DO NOT USE). White/clear = fresh. Spent absorber allows CO₂ rebreathing → hypercarbia → respiratory acidosis → cardiovascular compromise. Change before the case if any doubt.</div>
+    </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">What is the APL valve and when do you use manual vs auto?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">Adjustable Pressure Limiting valve — controls max circuit pressure. Manual mode: bag ventilation (set to 20–30 cmH₂O). Auto/vent mode: ventilator takes over. Failure to switch modes = inability to ventilate or uncontrolled pressure. This is a classic pimp question.</div>
+    </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">What is the minimum safe O₂ flow rate?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">200 mL/min O₂ is the minimum to prevent hypoxic gas delivery. Most machines have a safety interlock preventing pure N₂O delivery. The Dräger Fabius GS has a proportioning system that maintains minimum 25% O₂.</div>
+    </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">Walk me through the order of monitors you apply and why.</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">SpO₂ first (baseline oxygenation) → EKG (cardiac rhythm, baseline HR) → BP (baseline hemodynamics) → ETCO₂ after intubation (confirm placement, ventilation). Temperature as indicated. The order follows the priority of what kills you fastest if missed.</div>
+    </div>
+  </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════ MODULE 2: PRE-OP ═══ -->
-<div class="module" id="module-preop">
-
-  <div class="module-hero">
-    <div class="module-hero-title">Pre-Operative Assessment</div>
-    <div class="module-hero-sub">LEMON · STOP-BANG · NPO · Meds · Labs · Anesthesia Plan</div>
+<!-- PRE-OP PAGE -->
+<div class="page" id="page-preop">
+  <div class="page-header">
+    <div class="page-title" style="color:var(--blue)">Pre-op Assessment</div>
+    <div class="page-desc">Preanesthetic Interview · Airway · Plan</div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('preop','airway')">Airway</button>
+    <button class="tab-btn" onclick="switchTab('preop','npo')">NPO</button>
+    <button class="tab-btn" onclick="switchTab('preop','meds')">Meds</button>
+    <button class="tab-btn" onclick="switchTab('preop','stopbang')">STOP-BANG</button>
+    <button class="tab-btn" onclick="switchTab('preop','pimps')">Pimp Q&A</button>
   </div>
 
-  <!-- NPO -->
-  <div class="card open" id="card-npo">
-    <div class="card-header" onclick="toggleCard('card-npo')">
-      <div><div class="card-title">NPO Fasting Guidelines</div></div>
-      <span class="card-chevron">▼</span>
+  <div class="tab-content active" id="preop-airway">
+    <div class="section-label">LEMON Airway Assessment</div>
+    <div class="full-card">
+      <div class="full-card-header" style="color:var(--teal)">L — Look Externally</div>
+      <div class="full-card-body" style="font-size:13px;line-height:1.7;color:var(--muted)">Beard · Receding chin · Macroglossia · Facial trauma · Short/thick neck · Prior radiation · Obesity · Prominent incisors</div>
     </div>
-    <div class="card-body">
-      <div class="npo-row"><div class="npo-time">2 hr</div><div class="npo-label">Clear liquids — water, juice, black coffee, clear tea</div></div>
-      <div class="npo-row"><div class="npo-time">4 hr</div><div class="npo-label">Breast milk</div></div>
-      <div class="npo-row"><div class="npo-time">6 hr</div><div class="npo-label">Infant formula / non-human milk</div></div>
-      <div class="npo-row"><div class="npo-time">6 hr</div><div class="npo-label">Light meal — toast, crackers, fruit</div></div>
-      <div class="npo-row"><div class="npo-time">8+ hr</div><div class="npo-label">Heavy meal — fried, fatty, meat</div></div>
-      <div class="npo-row" style="border-bottom:none">
-        <div class="npo-time" style="color:var(--red)">1 WK</div>
-        <div><div class="npo-label">GLP-1 agonists (Ozempic, Wegovy, Mounjaro)</div>
-        <div style="font-size:11px;color:var(--red);margin-top:2px">⚠ Delayed gastric emptying — treat as full stomach if not held</div></div>
-      </div>
-      <div class="alert alert-gold" style="margin-top:10px">
-        <span class="alert-icon">💬</span>
-        <span>Chewing gum = treat as NPO violation — stimulates gastric acid secretion</span>
+    <div class="full-card">
+      <div class="full-card-header" style="color:var(--teal)">E — Evaluate 3-3-2 Rule</div>
+      <div class="full-card-body">
+        <div class="ref-row"><span class="ref-key">Mouth opening</span><span class="ref-val">≥3 finger breadths (≥4.5 cm)</span></div>
+        <div class="ref-row"><span class="ref-key">Mentum to hyoid</span><span class="ref-val">≥3 finger breadths</span></div>
+        <div class="ref-row"><span class="ref-key">Hyoid to thyroid notch</span><span class="ref-val">≥2 finger breadths</span></div>
       </div>
     </div>
-  </div>
-
-  <!-- LEMON Airway -->
-  <div class="card open" id="card-lemon">
-    <div class="card-header" onclick="toggleCard('card-lemon')">
-      <div><div class="card-title">LEMON Airway Evaluation</div></div>
-      <span class="card-chevron">▼</span>
+    <div class="full-card">
+      <div class="full-card-header" style="color:var(--teal)">M — Mallampati Classification</div>
+      <div class="full-card-body">
+        <div class="ref-row"><span class="ref-key">Class I</span><span class="ref-val" style="color:var(--green)">Soft palate, uvula, fauces, pillars visible</span></div>
+        <div class="ref-row"><span class="ref-key">Class II</span><span class="ref-val" style="color:var(--green)">Soft palate, uvula, fauces visible</span></div>
+        <div class="ref-row"><span class="ref-key">Class III</span><span class="ref-val" style="color:var(--gold)">Only base of uvula visible — anticipate difficulty</span></div>
+        <div class="ref-row"><span class="ref-key">Class IV</span><span class="ref-val" style="color:var(--red)">Soft palate NOT visible — difficult airway plan</span></div>
+      </div>
     </div>
-    <div class="card-body">
-      <div class="lemon-row">
-        <div class="lemon-letter">L</div>
-        <div class="lemon-content">
-          <div class="lemon-label">Look Externally</div>
-          <div class="lemon-detail">Beard, receding chin, macroglossia, facial trauma, short/thick neck, radiation changes, facial deformities</div>
-        </div>
+    <div class="full-card">
+      <div class="full-card-header" style="color:var(--teal)">O — Obstruction · N — Neck Mobility</div>
+      <div class="full-card-body" style="font-size:13px;line-height:1.7;color:var(--muted)">
+        <strong style="color:var(--text)">Obstruction:</strong> Tumor, abscess, epiglottitis, goiter, angioedema<br>
+        <strong style="color:var(--text)">Neck:</strong> Full ROM required · C-spine disease · RA · Halo/collar
       </div>
-      <div class="lemon-row">
-        <div class="lemon-letter">E</div>
-        <div class="lemon-content">
-          <div class="lemon-label">Evaluate 3-3-2 Rule</div>
-          <div class="lemon-detail">Mouth opening ≥3 fingers · Chin to hyoid ≥3 fingers · Hyoid to thyroid notch ≥2 fingers</div>
-        </div>
-      </div>
-      <div class="lemon-row">
-        <div class="lemon-letter">M</div>
-        <div class="lemon-content">
-          <div class="lemon-label">Mallampati Class</div>
-          <div class="lemon-detail">Open mouth + protrude tongue. Class I–II = favorable. Class III–IV = video laryngoscope as primary</div>
-        </div>
-      </div>
-      <div class="lemon-row">
-        <div class="lemon-letter">O</div>
-        <div class="lemon-content">
-          <div class="lemon-label">Obstruction</div>
-          <div class="lemon-detail">Tumor, abscess, epiglottitis, goiter, angioedema, tracheal deviation, hematoma</div>
-        </div>
-      </div>
-      <div class="lemon-row" style="border-bottom:none">
-        <div class="lemon-letter">N</div>
-        <div class="lemon-content">
-          <div class="lemon-label">Neck Mobility</div>
-          <div class="lemon-detail">Flex/extension ROM · C-spine disease · RA · Halo/collar · Ankylosing spondylitis</div>
-        </div>
-      </div>
-      <div class="alert alert-red" style="margin-top:10px">
-        <span class="alert-icon">🔴</span>
-        <span>Mallampati III-IV → VL as primary. Multiple predictors → awake FOI. Document Plan A→B→C→D before induction.</span>
-      </div>
+    </div>
+    <div class="alert alert-gold" style="margin-top:8px">
+      <div class="alert-title">⚠ Difficult Airway Plan</div>
+      MP III-IV → VL as primary. Multiple predictors → awake fiberoptic. Always have plan A→B→C→D. Second provider available. Document everything.
     </div>
   </div>
 
-  <!-- STOP-BANG -->
-  <div class="card" id="card-stopbang">
-    <div class="card-header" onclick="toggleCard('card-stopbang')">
-      <div><div class="card-title">STOP-BANG — OSA Screening</div></div>
-      <span class="card-chevron">▼</span>
+  <div class="tab-content" id="preop-npo">
+    <div class="section-label">ASA NPO Fasting Guidelines</div>
+    <div class="full-card">
+      <div class="full-card-body">
+        <div class="ref-row"><span class="ref-key">Clear liquids</span><span class="ref-val" style="color:var(--green)">2 hours</span></div>
+        <div class="ref-row"><span class="ref-key">Breast milk</span><span class="ref-val" style="color:var(--teal)">4 hours</span></div>
+        <div class="ref-row"><span class="ref-key">Formula / non-human milk</span><span class="ref-val" style="color:var(--gold)">6 hours</span></div>
+        <div class="ref-row"><span class="ref-key">Light meal (toast)</span><span class="ref-val" style="color:var(--gold)">6 hours</span></div>
+        <div class="ref-row"><span class="ref-key">Heavy meal (fatty/meat)</span><span class="ref-val" style="color:var(--red)">8+ hours</span></div>
+        <div class="ref-row"><span class="ref-key">GLP-1 agonist (Ozempic)</span><span class="ref-val" style="color:var(--red)">HOLD 1 WEEK</span></div>
+        <div class="ref-row"><span class="ref-key">Chewing gum</span><span class="ref-val" style="color:var(--red)">Treat as NPO violation</span></div>
+      </div>
     </div>
-    <div class="card-body">
-      <div id="stopbang-list"></div>
-      <div class="fluid-box" style="margin-top:10px">
-        <div class="fluid-title">Score Interpretation</div>
-        <div class="fluid-row"><span>0–2</span><span class="fluid-val" style="color:var(--green)">Low Risk</span></div>
-        <div class="fluid-row"><span>3–4</span><span class="fluid-val" style="color:var(--gold)">Intermediate Risk</span></div>
-        <div class="fluid-row" style="border-bottom:none"><span>5–8</span><span class="fluid-val" style="color:var(--red)">High Risk → ↓ opioids, CPAP PACU</span></div>
-      </div>
-      <div style="font-family:var(--mono);font-size:16px;color:var(--teal);text-align:center;margin-top:8px">
-        Score: <span id="stopbang-score">0</span> / 8
-      </div>
+    <div class="alert alert-red" style="margin-top:8px">
+      <div class="alert-title">🔴 GLP-1 Agonist Warning</div>
+      Semaglutide/Ozempic significantly delays gastric emptying. Even with adequate fasting, substantial gastric residual may remain. Consider RSI or point-of-care gastric ultrasound.
     </div>
   </div>
 
-  <!-- Key Medications -->
-  <div class="card" id="card-meds">
-    <div class="card-header" onclick="toggleCard('card-meds')">
-      <div><div class="card-title">Perioperative Medication Management</div></div>
-      <span class="card-chevron">▼</span>
+  <div class="tab-content" id="preop-meds">
+    <div class="section-label">Day-of Medication Management</div>
+    <div class="full-card">
+      <div class="full-card-body">
+        <div class="ref-row"><span class="ref-key">Beta-blockers</span><span class="ref-val" style="color:var(--green)">CONTINUE</span></div>
+        <div class="ref-row"><span class="ref-key">ACE-I / ARBs</span><span class="ref-val" style="color:var(--red)">HOLD day-of</span></div>
+        <div class="ref-row"><span class="ref-key">Diuretics</span><span class="ref-val" style="color:var(--gold)">HOLD / discuss</span></div>
+        <div class="ref-row"><span class="ref-key">Metformin</span><span class="ref-val" style="color:var(--red)">HOLD day-of</span></div>
+        <div class="ref-row"><span class="ref-key">Insulin</span><span class="ref-val" style="color:var(--gold)">REDUCE dose</span></div>
+        <div class="ref-row"><span class="ref-key">GLP-1 agonist</span><span class="ref-val" style="color:var(--red)">HOLD 1 week</span></div>
+        <div class="ref-row"><span class="ref-key">Warfarin / DOAC</span><span class="ref-val" style="color:var(--gold)">CASE SPECIFIC</span></div>
+        <div class="ref-row"><span class="ref-key">Clopidogrel</span><span class="ref-val" style="color:var(--gold)">Hold 5–7d</span></div>
+        <div class="ref-row"><span class="ref-key">Opioids (chronic)</span><span class="ref-val" style="color:var(--green)">CONTINUE</span></div>
+        <div class="ref-row"><span class="ref-key">AEDs (seizure meds)</span><span class="ref-val" style="color:var(--green)">CONTINUE</span></div>
+        <div class="ref-row"><span class="ref-key">SSRIs / SNRIs</span><span class="ref-val" style="color:var(--green)">CONTINUE</span></div>
+        <div class="ref-row"><span class="ref-key">MAOIs</span><span class="ref-val" style="color:var(--red)">⚠ SPECIALIST</span></div>
+        <div class="ref-row"><span class="ref-key">Levodopa (Parkinson's)</span><span class="ref-val" style="color:var(--green)">CONTINUE</span></div>
+        <div class="ref-row"><span class="ref-key">Herbal supplements</span><span class="ref-val" style="color:var(--red)">HOLD 2 weeks</span></div>
+      </div>
     </div>
-    <div class="card-body">
-      <div id="meds-list"></div>
+    <div class="alert alert-gold" style="margin-top:8px">
+      <div class="alert-title">ACE-I / ARB Day-of Hold</div>
+      Blocks RAAS → refractory hypotension on induction that doesn't respond to typical vasopressors. Especially dangerous with neuraxial anesthesia.
     </div>
   </div>
 
-  <!-- Substance Use Hard Stops -->
-  <div class="card" id="card-substance">
-    <div class="card-header" onclick="toggleCard('card-substance')">
-      <div><div class="card-title">Substance Use &amp; Hard Stops</div></div>
-      <span class="card-chevron">▼</span>
+  <div class="tab-content" id="preop-stopbang">
+    <div class="section-label">STOP-BANG OSA Screening</div>
+    <div class="card" id="stopbang-card">
+      <div class="check-item" onclick="toggleCheck(this,'sb')"><div class="check-box"></div><div class="check-content"><div class="check-label">S — Snore loudly?</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'sb')"><div class="check-box"></div><div class="check-content"><div class="check-label">T — Tired/fatigued/sleepy during day?</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'sb')"><div class="check-box"></div><div class="check-content"><div class="check-label">O — Observed stopping breathing during sleep?</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'sb')"><div class="check-box"></div><div class="check-content"><div class="check-label">P — High blood Pressure (treated)?</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'sb')"><div class="check-box"></div><div class="check-content"><div class="check-label">B — BMI &gt;35 kg/m²?</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'sb')"><div class="check-box"></div><div class="check-content"><div class="check-label">A — Age over 50?</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'sb')"><div class="check-box"></div><div class="check-content"><div class="check-label">N — Neck circumference &gt;40 cm?</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'sb')"><div class="check-box"></div><div class="check-content"><div class="check-label">G — Gender = Male?</div></div></div>
     </div>
-    <div class="card-body">
-      <div id="substance-list"></div>
-      <div class="alert alert-red" style="margin-top:10px">
-        <span class="alert-icon">🔴</span>
-        <span><strong>HARD STOP — Delay surgery for:</strong> Acute intoxication (any) · Unstable vitals (tachy, HTN, AMS) · Active withdrawal · Cocaine use today</span>
+    <div class="full-card" style="margin-top:8px">
+      <div class="full-card-body">
+        <div class="ref-row"><span class="ref-key">0–2</span><span class="ref-val" style="color:var(--green)">Low Risk</span></div>
+        <div class="ref-row"><span class="ref-key">3–4</span><span class="ref-val" style="color:var(--gold)">Intermediate Risk</span></div>
+        <div class="ref-row"><span class="ref-key">5–8</span><span class="ref-val" style="color:var(--red)">High Risk — CPAP postop, minimize opioids</span></div>
       </div>
     </div>
   </div>
 
-  <!-- Lab Values -->
-  <div class="card" id="card-labs">
-    <div class="card-header" onclick="toggleCard('card-labs')">
-      <div><div class="card-title">Critical Lab Thresholds</div></div>
-      <span class="card-chevron">▼</span>
+  <div class="tab-content" id="preop-pimps">
+    <div class="section-label">Pre-op Assessment — Pimp Q&A</div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">Why hold ACE-I/ARBs on the day of surgery?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">Block RAAS → refractory hypotension on induction that doesn't respond to typical vasopressors. Especially dangerous with neuraxial anesthesia. Generally hold morning-of for elective cases.</div>
     </div>
-    <div class="card-body">
-      <table class="ref-table">
-        <thead><tr><th>Lab</th><th>Normal</th><th>Action Threshold</th></tr></thead>
-        <tbody id="labs-table"></tbody>
-      </table>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">GLP-1 agonist patient — how does this change your NPO assessment?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">Semaglutide/GLP-1 agonists significantly delay gastric emptying. Even with adequate fasting, substantial gastric residual may remain. ASA guidance: hold weekly GLP-1 for 1 week. Consider RSI or point-of-care gastric ultrasound.</div>
+    </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">When is succinylcholine absolutely contraindicated?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">K⁺ &gt;5.5 mEq/L · Burns &gt;48h post-injury · Crush injury/rhabdomyolysis · Denervation injuries (UMN/LMN) · Prolonged immobility · Personal/family history of MH · Pseudocholinesterase deficiency · Myopathies (Duchenne, etc.)</div>
+    </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">Mallampati III — what does it mean and what's your plan?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">Only base of uvula visible = anticipated difficult direct laryngoscopy. Video laryngoscope as primary tool. Have SGA + fiberoptic ready. Second provider available. Discuss with attending. Consider awake FOI if also Class IV or multiple predictors.</div>
+    </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">What platelet count is the threshold for spinal anesthesia?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">80,000–100,000/μL generally required. Below 50k = neuraxial contraindicated. Also consider trend (falling is more concerning than stable) and etiology of thrombocytopenia.</div>
+    </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">STOP-BANG score of 6 — how does this change your plan?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">High risk OSA. Minimize opioids (multimodal: regional, NSAIDs, acetaminophen, dexamethasone). Anticipate difficult mask ventilation. CPAP in PACU. Semi-upright positioning. Consider overnight admission. Continue home CPAP through perioperative period.</div>
     </div>
   </div>
-
-  <!-- Pimp QA Pre-op -->
-  <div class="card open" id="card-preop-pimp">
-    <div class="card-header" onclick="toggleCard('card-preop-pimp')">
-      <div><div class="card-title">⚡ Pimp Q&amp;A — Pre-op</div></div>
-      <span class="card-chevron">▼</span>
-    </div>
-    <div class="card-body">
-      <div id="preop-pimp-list"></div>
-    </div>
-  </div>
-
 </div>
 
-
-<!-- ═══════════════════════════════════════ QUICK REF ═══ -->
-<div class="module" id="module-quickref">
-
-  <div class="module-hero">
-    <div class="module-hero-title">Quick Reference</div>
-    <div class="module-hero-sub">Critical thresholds · Classifications · Hard stops</div>
+<!-- INDUCTION PAGE -->
+<div class="page" id="page-induction">
+  <div class="page-header">
+    <div class="page-title" style="color:var(--gold)">Induction</div>
+    <div class="page-desc">Non-RSI · RSI · Succinylcholine · Rocuronium</div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('induction','nonrsi')">Non-RSI</button>
+    <button class="tab-btn" onclick="switchTab('induction','rsi')">RSI</button>
+    <button class="tab-btn" onclick="switchTab('induction','pimps')">Pimp Q&A</button>
   </div>
 
-  <!-- NPO Summary -->
-  <div class="card open" id="card-qr-npo">
-    <div class="card-header" onclick="toggleCard('card-qr-npo')">
-      <div><div class="card-title">NPO Fasting — Quick Reference</div></div>
-      <span class="card-chevron">▼</span>
+  <div class="tab-content active" id="induction-nonrsi">
+    <div class="section-label">Standard Induction Sequence</div>
+    <div class="card" id="checklist-nonrsi">
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Pre-oxygenate 3–5 min (FiO₂ 100%)</div><div class="check-sub">Goal: EtO₂ ≥85% — extends apnea time</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">IV access confirmed patent</div><div class="check-sub">Flushes freely — no infiltration</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Monitors applied and baseline recorded</div><div class="check-sub">SpO₂, EKG, BP, ETCO₂</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Premedication given (if ordered)</div><div class="check-sub">Midazolam 1–2mg IV · Fentanyl 1–2mcg/kg</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Induction agent administered</div><div class="check-sub">Propofol 1.5–2.5mg/kg · Etomidate 0.3mg/kg · Ketamine 1–2mg/kg</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Loss of consciousness confirmed</div><div class="check-sub">Lash reflex gone, jaw relaxed</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Mask ventilation established (if relaxant used)</div><div class="check-sub">Confirm chest rise + EtCO₂ waveform</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Paralytic administered (if indicated)</div><div class="check-sub">Rocuronium 0.6mg/kg · Vecuronium · Cisatracurium</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Wait for paralysis (60–90 seconds)</div><div class="check-sub">Jaw slack, no resistance</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Laryngoscopy and intubation</div><div class="check-sub">DL or VL · Visualize cords · Pass ETT</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Cuff inflated — ETT position confirmed</div><div class="check-sub">EtCO₂ waveform · Bilateral breath sounds · CXR if needed</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Secure ETT, connect to circuit</div><div class="check-sub">Tape/holder · Note depth at teeth</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Ventilator settings confirmed</div><div class="check-sub">TV 6–8 mL/kg IBW · RR 10–14 · PEEP 5</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'nonrsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Maintenance agent started</div><div class="check-sub">Volatile or TIVA initiated</div></div></div>
     </div>
-    <div class="card-body">
-      <div class="qr-grid">
-        <div class="qr-card"><div class="qr-label">Clear liquids</div><div class="qr-val">2 hr</div></div>
-        <div class="qr-card"><div class="qr-label">Breast milk</div><div class="qr-val">4 hr</div></div>
-        <div class="qr-card"><div class="qr-label">Formula / milk</div><div class="qr-val">6 hr</div></div>
-        <div class="qr-card"><div class="qr-label">Light meal</div><div class="qr-val">6 hr</div></div>
-        <div class="qr-card"><div class="qr-label">Heavy meal</div><div class="qr-val">8+ hr</div></div>
-        <div class="qr-card" style="border-color:rgba(255,71,87,0.3)"><div class="qr-label" style="color:var(--red)">GLP-1 agonists</div><div class="qr-val" style="color:var(--red)">1 WEEK</div></div>
+  </div>
+
+  <div class="tab-content" id="induction-rsi">
+    <div class="section-label">Rapid Sequence Induction</div>
+    <div class="alert alert-red">
+      <div class="alert-title">RSI Indications</div>
+      Full stomach · GERD/hiatal hernia · Bowel obstruction · Trauma · Pregnancy · GLP-1 agonist · Gastroparesis · Recent meal · Emergency
+    </div>
+    <div class="card" id="checklist-rsi" style="margin-top:8px">
+      <div class="check-item" onclick="toggleCheck(this,'rsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Pre-oxygenate 3–5 min (FiO₂ 100%)</div><div class="check-sub">8 vital capacity breaths acceptable if time critical</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'rsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Aspiration prophylaxis given (if time allows)</div><div class="check-sub">Sodium citrate 30mL PO · Metoclopramide 10mg IV · Famotidine 20mg IV</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'rsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Suction immediately available and functional</div><div class="check-sub">Yankauer at head of bed, on and ready</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'rsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Positioning — sniffing or ramp if obese</div><div class="check-sub">Ear to sternal notch alignment for obese patients</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'rsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Induction agent + paralytic given simultaneously</div><div class="check-sub">No mask ventilation after LOC</div></div></div>
+
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);padding:10px 0 4px;">Option A — Succinylcholine</div>
+      <div class="check-item" onclick="toggleCheck(this,'rsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Succinylcholine 1.5mg/kg IV (use TBW)</div><div class="check-sub">Onset 45–60 sec · Duration 8–12 min · Depolarizing NMB</div></div></div>
+      <div class="alert alert-gold" style="margin:4px 0 8px">
+        <div class="alert-title">Succinylcholine Contraindications</div>
+        K⁺ &gt;5.5 · Burns &gt;48h · Crush injury · Denervation · MH history · Pseudocholinesterase deficiency · Myopathy
+      </div>
+
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);padding:10px 0 4px;">Option B — Rocuronium + Sugammadex</div>
+      <div class="check-item" onclick="toggleCheck(this,'rsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Rocuronium 1.2mg/kg IV (use IBW/LBW)</div><div class="check-sub">Onset 60 sec · Duration 60–90 min</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'rsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Sugammadex 16mg/kg available (if can't intubate)</div><div class="check-sub">Immediate reversal of 1.2mg/kg roc in ~3 min</div></div></div>
+
+      <div style="padding-top:8px">
+      <div class="check-item" onclick="toggleCheck(this,'rsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Cricoid pressure applied at LOC (controversial)</div><div class="check-sub">10N awake → 30N at LOC · Release on laryngoscopy if obstructs view</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'rsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Intubation at 60 seconds</div><div class="check-sub">Do NOT ventilate between induction and intubation</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'rsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">ETT placement confirmed</div><div class="check-sub">EtCO₂ waveform · Bilateral breath sounds · No gurgling</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'rsi')"><div class="check-box"></div><div class="check-content"><div class="check-label">Cricoid pressure released after cuff inflated & confirmed</div></div></div>
       </div>
     </div>
   </div>
 
-  <!-- Mallampati -->
-  <div class="card open" id="card-qr-mp">
-    <div class="card-header" onclick="toggleCard('card-qr-mp')">
-      <div><div class="card-title">Mallampati Classification</div></div>
-      <span class="card-chevron">▼</span>
+  <div class="tab-content" id="induction-pimps">
+    <div class="section-label">Induction — Pimp Q&A</div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">Why pre-oxygenate and what's your goal?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">Replaces N₂ in FRC with O₂, creating an O₂ reservoir that extends safe apnea time. Goal: EtO₂ ≥85% (end-tidal O₂). Healthy adult: 8–10 min apnea safe. Obese/pregnant/pediatric: much shorter — 2–4 min. This is why we position and pre-ox before every induction.</div>
     </div>
-    <div class="card-body">
-      <div class="mp-grid">
-        <div class="mp-card mp-1">
-          <div class="mp-class" style="color:var(--green)">Class I ✓</div>
-          <div class="mp-desc">Soft palate, uvula, fauces, pillars fully visible</div>
-        </div>
-        <div class="mp-card mp-2">
-          <div class="mp-class" style="color:var(--teal)">Class II ✓</div>
-          <div class="mp-desc">Soft palate, uvula, fauces visible</div>
-        </div>
-        <div class="mp-card mp-3">
-          <div class="mp-class" style="color:var(--gold)">Class III ⚠</div>
-          <div class="mp-desc">Only base of uvula visible — anticipate difficulty</div>
-        </div>
-        <div class="mp-card mp-4">
-          <div class="mp-class" style="color:var(--red)">Class IV 🔴</div>
-          <div class="mp-desc">Soft palate NOT visible — difficult airway plan required</div>
-        </div>
-      </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">Succinylcholine vs rocuronium for RSI — when do you choose which?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">Succinylcholine: faster onset (45–60 sec), shorter duration (8–12 min) — ideal when airway concern exists and you want conditions to resolve quickly. Rocuronium 1.2mg/kg: comparable intubating conditions but longer duration (60–90 min) — use when succinylcholine contraindicated. Sugammadex 16mg/kg reverses roc in ~3 min if can't intubate can't oxygenate.</div>
+    </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">How do you confirm ETT placement?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">Gold standard: continuous EtCO₂ waveform (≥6 breaths). Supporting: bilateral breath sounds on auscultation, chest rise, no epigastric gurgling, fogging of tube, SpO₂ maintained. CXR for depth if needed. EtCO₂ waveform alone is definitive — if no waveform, assume esophageal and re-intubate.</div>
+    </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">What is cricoid pressure and is it evidence-based?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">Sellick's maneuver — posteriorly directed pressure on cricoid cartilage to compress esophagus and prevent passive regurgitation. Controversial: evidence is mixed and it can worsen laryngoscopic view. Current guidance: apply if trained, release if it obstructs view. Never delay intubation to apply it. Many centers have abandoned it.</div>
     </div>
   </div>
-
-  <!-- ASA Classification -->
-  <div class="card open" id="card-qr-asa">
-    <div class="card-header" onclick="toggleCard('card-qr-asa')">
-      <div><div class="card-title">ASA Physical Status Classification</div></div>
-      <span class="card-chevron">▼</span>
-    </div>
-    <div class="card-body">
-      <div class="asa-row asa-i"><div class="asa-class">ASA I</div><div class="asa-desc">Healthy patient, no systemic disease</div></div>
-      <div class="asa-row asa-ii"><div class="asa-class">ASA II</div><div class="asa-desc">Mild systemic disease — controlled HTN, mild asthma, BMI 30–40, social smoker</div></div>
-      <div class="asa-row asa-iii"><div class="asa-class">ASA III</div><div class="asa-desc">Severe systemic disease — COPD, poorly controlled DM, morbid obesity (BMI>40), CAD, prior MI >3mo</div></div>
-      <div class="asa-row asa-iv"><div class="asa-class">ASA IV</div><div class="asa-desc">Severe disease = constant threat to life — decompensated CHF, MI &lt;3mo, ESRD</div></div>
-      <div class="asa-row asa-v"><div class="asa-class">ASA V</div><div class="asa-desc">Moribund — not expected to survive without surgery (ruptured AAA, massive PE)</div></div>
-      <div class="asa-row asa-vi"><div class="asa-class">ASA VI</div><div class="asa-desc">Brain-dead organ donor</div></div>
-      <div class="asa-row asa-e" style="border-bottom:none"><div class="asa-class">+E</div><div class="asa-desc">Emergency modifier — delay = threat to life/limb/organ. Requires MD sign-off.</div></div>
-    </div>
-  </div>
-
-  <!-- Hard Stop Criteria -->
-  <div class="card open" id="card-qr-hardstop">
-    <div class="card-header" onclick="toggleCard('card-qr-hardstop')">
-      <div><div class="card-title">🔴 Hard Stop Criteria — Delay Surgery</div></div>
-      <span class="card-chevron">▼</span>
-    </div>
-    <div class="card-body">
-      <div id="hardstop-list"></div>
-    </div>
-  </div>
-
-  <!-- Key Drug Thresholds -->
-  <div class="card open" id="card-qr-thresholds">
-    <div class="card-header" onclick="toggleCard('card-qr-thresholds')">
-      <div><div class="card-title">Critical Drug &amp; Lab Thresholds</div></div>
-      <span class="card-chevron">▼</span>
-    </div>
-    <div class="card-body">
-      <table class="ref-table">
-        <thead><tr><th>Parameter</th><th>Threshold</th><th>Action</th></tr></thead>
-        <tbody>
-          <tr><td>K+</td><td style="color:var(--red);font-family:var(--mono)">&gt;5.5 mEq/L</td><td>Avoid succinylcholine</td></tr>
-          <tr><td>Platelets</td><td style="color:var(--red);font-family:var(--mono)">&lt;80k/μL</td><td>Neuraxial caution; &lt;50k = contraindicated</td></tr>
-          <tr><td>INR</td><td style="color:var(--gold);font-family:var(--mono)">&gt;1.5</td><td>Coagulopathy — neuraxial concern</td></tr>
-          <tr><td>Hgb</td><td style="color:var(--gold);font-family:var(--mono)">&lt;7 g/dL</td><td>Transfusion threshold (case-dependent)</td></tr>
-          <tr><td>Glucose</td><td style="color:var(--gold);font-family:var(--mono)">&lt;70 mg/dL</td><td>Treat before proceeding</td></tr>
-          <tr><td>Glucose</td><td style="color:var(--gold);font-family:var(--mono)">&gt;180 mg/dL</td><td>Optimize; target 140–180 intraop</td></tr>
-          <tr><td>O₂ PSI (tank)</td><td style="color:var(--red);font-family:var(--mono)">&lt;500 PSI</td><td>Change cylinder; full = 2000 PSI</td></tr>
-          <tr><td>Circuit leak</td><td style="color:var(--green);font-family:var(--mono)">&lt;300 mL/min</td><td>At 30 cmH₂O — pass criteria</td></tr>
-          <tr><td>Suction</td><td style="color:var(--green);font-family:var(--mono)">≥300 mmHg</td><td>Minimum negative pressure required</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Succinylcholine Contraindications -->
-  <div class="card" id="card-qr-succs">
-    <div class="card-header" onclick="toggleCard('card-qr-succs')">
-      <div><div class="card-title">Succinylcholine — Absolute Contraindications</div></div>
-      <span class="card-chevron">▼</span>
-    </div>
-    <div class="card-body">
-      <div id="succs-list"></div>
-    </div>
-  </div>
-
 </div>
 
-
-<!-- ═══════════════════════════════════════ MED HX ═══ -->
-<div class="module" id="module-medhx">
-
-  <div class="module-hero">
-    <div class="module-hero-title">Medical History</div>
-    <div class="module-hero-sub">Select active conditions — anesthesia implications auto-displayed</div>
+<!-- EMERGENCE PAGE -->
+<div class="page" id="page-emergence">
+  <div class="page-header">
+    <div class="page-title" style="color:var(--purple)">Emergence</div>
+    <div class="page-desc">Extubation Criteria · Wake-up · PACU Handoff</div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('emergence','criteria')">Extubation Criteria</button>
+    <button class="tab-btn" onclick="switchTab('emergence','sequence')">Sequence</button>
+    <button class="tab-btn" onclick="switchTab('emergence','pimps')">Pimp Q&A</button>
   </div>
 
-  <div class="active-summary">
-    <div class="active-summary-title">Active Conditions <span class="active-count" id="medhx-count">0</span></div>
-    <div class="active-list" id="medhx-active-list"></div>
-  </div>
-
-  <div id="medhx-systems"></div>
-
-</div>
-
-
-<!-- ═══════════════════════════════════════ SURG HX ═══ -->
-<div class="module" id="module-sxhx">
-
-  <div class="module-hero">
-    <div class="module-hero-title">Surgical History</div>
-    <div class="module-hero-sub">Select prior procedures — flag anesthesia complications</div>
-  </div>
-
-  <div class="active-summary">
-    <div class="active-summary-title">Prior Procedures <span class="active-count" id="sxhx-count">0</span></div>
-    <div class="active-list" id="sxhx-active-list"></div>
-  </div>
-
-  <div class="card open" id="card-special-flags">
-    <div class="card-header" onclick="toggleCard('card-special-flags')">
-      <div><div class="card-title">⚠ Special Anesthesia Flags</div></div>
-      <span class="card-chevron">▼</span>
+  <div class="tab-content active" id="emergence-criteria">
+    <div class="section-label">Extubation Criteria — All Must Be Met</div>
+    <div class="card" id="checklist-extub">
+      <div class="check-item" onclick="toggleCheck(this,'extub')"><div class="check-box"></div><div class="check-content"><div class="check-label">Patient awake and following commands</div><div class="check-sub">Open eyes, squeeze hand, stick out tongue</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'extub')"><div class="check-box"></div><div class="check-content"><div class="check-label">Adequate reversal of neuromuscular blockade</div><div class="check-sub">TOF ratio ≥0.9 · Head lift ≥5 sec · Strong grip</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'extub')"><div class="check-box"></div><div class="check-content"><div class="check-label">Adequate spontaneous ventilation</div><div class="check-sub">RR 10–20 · TV ≥5–6 mL/kg · No accessory muscle use</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'extub')"><div class="check-box"></div><div class="check-content"><div class="check-label">SpO₂ ≥95% on FiO₂ ≤40%</div><div class="check-sub">Adequate oxygenation without heavy O₂ support</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'extub')"><div class="check-box"></div><div class="check-content"><div class="check-label">Hemodynamically stable</div><div class="check-sub">HR and BP within 20% of baseline</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'extub')"><div class="check-box"></div><div class="check-content"><div class="check-label">Normothermic ≥36°C</div><div class="check-sub">Hypothermia → shivering → ↑O₂ demand → impaired reversal</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'extub')"><div class="check-box"></div><div class="check-content"><div class="check-label">Pain adequately controlled</div><div class="check-sub">Patient not fighting tube due to pain</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'extub')"><div class="check-box"></div><div class="check-content"><div class="check-label">Airway reflexes intact (cough, gag)</div><div class="check-sub">Patient protecting own airway</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'extub')"><div class="check-box"></div><div class="check-content"><div class="check-label">No surgical contraindication to extubation</div><div class="check-sub">Airway edema · Prolonged case · Planned re-intubation</div></div></div>
     </div>
-    <div class="card-body">
-      <div id="special-flags-list"></div>
+
+    <div class="alert alert-red" style="margin-top:8px">
+      <div class="alert-title">Delay Extubation If:</div>
+      Suspected airway edema · Difficult intubation (may not be able to re-intubate) · Extensive head/neck surgery · Airway fire · Massive fluid resuscitation · SpO₂ not meeting criteria · TOF &lt;0.9
     </div>
   </div>
 
-  <div id="sxhx-systems"></div>
+  <div class="tab-content" id="emergence-sequence">
+    <div class="section-label">Emergence Sequence</div>
+    <div class="card" id="checklist-emerge">
+      <div class="check-item" onclick="toggleCheck(this,'emerge')"><div class="check-box"></div><div class="check-content"><div class="check-label">Anticipate end of case — reduce maintenance agent</div><div class="check-sub">Volatile: reduce 15–20 min before end · TIVA: calculate infusion timing</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'emerge')"><div class="check-box"></div><div class="check-content"><div class="check-label">Increase FiO₂ to 100%</div><div class="check-sub">Washes out volatile agent · Provides O₂ reserve</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'emerge')"><div class="check-box"></div><div class="check-content"><div class="check-label">Neostigmine + Glycopyrrolate (if non-depolarizing NMB)</div><div class="check-sub">Neostigmine 0.04mg/kg + Glycopyrrolate 0.2mg per 1mg neostigmine · Confirm TOF first</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'emerge')"><div class="check-box"></div><div class="check-content"><div class="check-label">OR — Sugammadex (rocuronium/vecuronium)</div><div class="check-sub">TOF 1–2 twitches: 4mg/kg · TOF ≥2 twitches: 2mg/kg</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'emerge')"><div class="check-box"></div><div class="check-content"><div class="check-label">PONV prophylaxis given (if not given earlier)</div><div class="check-sub">Ondansetron 4mg · Dexamethasone 4–8mg · Scopolamine patch</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'emerge')"><div class="check-box"></div><div class="check-content"><div class="check-label">Oral airway in (if needed for airway tone)</div><div class="check-sub">Remove before fully awake to avoid laryngospasm stimulus</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'emerge')"><div class="check-box"></div><div class="check-content"><div class="check-label">Suction oropharynx thoroughly</div><div class="check-sub">Blood · Secretions · Before cuff deflation</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'emerge')"><div class="check-box"></div><div class="check-content"><div class="check-label">Extubation criteria met — confirm all above</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'emerge')"><div class="check-box"></div><div class="check-content"><div class="check-label">Deflate cuff, remove ETT on positive pressure breath</div><div class="check-sub">Coughing on breath out = normal</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'emerge')"><div class="check-box"></div><div class="check-content"><div class="check-label">Apply face mask O₂ · Confirm SpO₂ maintained</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'emerge')"><div class="check-box"></div><div class="check-content"><div class="check-label">Transport to PACU with O₂ and monitoring</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'emerge')"><div class="check-box"></div><div class="check-content"><div class="check-label">PACU handoff — SBAR format</div><div class="check-sub">Situation · Background · Assessment · Recommendation</div></div></div>
+    </div>
+  </div>
 
+  <div class="tab-content" id="emergence-pimps">
+    <div class="section-label">Emergence — Pimp Q&A</div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">What TOF ratio is required before extubation?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">TOF ratio ≥0.9 (some say ≥1.0). Below 0.9 = residual neuromuscular blockade → upper airway obstruction, impaired respiratory effort, aspiration risk. Never extubate without confirming reversal quantitatively — subjective assessment (hand grip alone) is insufficient.</div>
+    </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">What is laryngospasm and how do you treat it?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">Reflexive closure of vocal cords → partial or complete airway obstruction. Usually at emergence when patient is in "Stage II" (excitement phase). Treatment: 100% O₂, jaw thrust, CPAP, remove stimulus. If partial: continuous positive pressure usually breaks it. If complete (no air moving, SpO₂ dropping): Succinylcholine 0.1–0.5mg/kg IV (or 4mg/kg IM if no IV) → intubate if needed.</div>
+    </div>
+    <div class="pimp-item" onclick="togglePimp(this)">
+      <div class="pimp-q"><span class="pimp-icon">⚡</span><div class="pimp-question">Neostigmine vs sugammadex — when do you use each?</div><span class="pimp-chevron">›</span></div>
+      <div class="pimp-a">Neostigmine: acetylcholinesterase inhibitor — works on ALL non-depolarizing NMBs. Must give with anticholinergic (glycopyrrolate) to block muscarinic effects (bradycardia, secretions). Ceiling effect — can't fully reverse deep block. Sugammadex: encapsulates rocuronium/vecuronium specifically. No ceiling. Can reverse deep block. No anticholinergic needed. Preferred when possible.</div>
+    </div>
+  </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════ ALLERGIES ═══ -->
-<div class="module" id="module-allergies">
-
-  <div class="module-hero">
-    <div class="module-hero-title">Allergies</div>
-    <div class="module-hero-sub">Select known allergies — anesthesia alternatives auto-displayed</div>
+<!-- QUICK REFERENCE PAGE -->
+<div class="page" id="page-quickref">
+  <div class="page-header">
+    <div class="page-title" style="color:var(--green)">Quick Reference</div>
+    <div class="page-desc">NPO · ASA · Mallampati · Doses · Vasopressors</div>
   </div>
 
-  <div class="active-summary" style="border-color:rgba(255,71,87,0.3)">
-    <div class="active-summary-title" style="color:var(--red)">Active Allergies <span class="active-count" id="allergy-count" style="background:var(--red)">0</span></div>
-    <div class="active-list" id="allergy-active-list"></div>
+  <div class="section-label">NPO Guidelines</div>
+  <div class="full-card">
+    <div class="full-card-body">
+      <div class="ref-row"><span class="ref-key">Clear liquids</span><span class="ref-val" style="color:var(--green)">2 hr</span></div>
+      <div class="ref-row"><span class="ref-key">Breast milk</span><span class="ref-val" style="color:var(--teal)">4 hr</span></div>
+      <div class="ref-row"><span class="ref-key">Formula / non-human milk</span><span class="ref-val" style="color:var(--gold)">6 hr</span></div>
+      <div class="ref-row"><span class="ref-key">Light meal</span><span class="ref-val" style="color:var(--gold)">6 hr</span></div>
+      <div class="ref-row"><span class="ref-key">Heavy meal</span><span class="ref-val" style="color:var(--red)">8+ hr</span></div>
+      <div class="ref-row"><span class="ref-key">GLP-1 agonist</span><span class="ref-val" style="color:var(--red)">1 WEEK</span></div>
+    </div>
   </div>
 
-  <div id="allergy-systems"></div>
+  <div class="section-label">ASA Classification</div>
+  <div class="full-card">
+    <div class="full-card-body">
+      <div class="ref-row"><span class="ref-key">ASA I</span><span class="ref-val">Healthy, no disease</span></div>
+      <div class="ref-row"><span class="ref-key">ASA II</span><span class="ref-val">Mild systemic disease</span></div>
+      <div class="ref-row"><span class="ref-key">ASA III</span><span class="ref-val" style="color:var(--gold)">Severe systemic disease</span></div>
+      <div class="ref-row"><span class="ref-key">ASA IV</span><span class="ref-val" style="color:var(--red)">Constant threat to life</span></div>
+      <div class="ref-row"><span class="ref-key">ASA V</span><span class="ref-val" style="color:var(--red)">Moribund — surgery = last resort</span></div>
+      <div class="ref-row"><span class="ref-key">ASA VI</span><span class="ref-val" style="color:var(--muted)">Brain-dead organ donor</span></div>
+      <div class="ref-row"><span class="ref-key">+E modifier</span><span class="ref-val" style="color:var(--gold)">Emergency — delay = threat to life</span></div>
+    </div>
+  </div>
 
+  <div class="section-label">Emergency Drug Doses</div>
+  <div class="full-card">
+    <div class="full-card-body">
+      <div class="ref-row"><span class="ref-key">Epinephrine (cardiac arrest)</span><span class="ref-val">1mg IV q3–5min</span></div>
+      <div class="ref-row"><span class="ref-key">Epinephrine (anaphylaxis)</span><span class="ref-val">0.3mg IM / 5–10mcg IV bolus</span></div>
+      <div class="ref-row"><span class="ref-key">Atropine (bradycardia)</span><span class="ref-val">0.5–1mg IV</span></div>
+      <div class="ref-row"><span class="ref-key">Succinylcholine (laryngospasm)</span><span class="ref-val">0.1–0.5mg/kg IV</span></div>
+      <div class="ref-row"><span class="ref-key">Sugammadex (deep block reversal)</span><span class="ref-val">16mg/kg IV</span></div>
+      <div class="ref-row"><span class="ref-key">Dantrolene (MH)</span><span class="ref-val">2.5mg/kg IV q5min (max 10mg/kg)</span></div>
+      <div class="ref-row"><span class="ref-key">Intralipid (LAST)</span><span class="ref-val">1.5mL/kg bolus then 0.25mL/kg/min</span></div>
+      <div class="ref-row"><span class="ref-key">Naloxone (opioid reversal)</span><span class="ref-val">40mcg IV q2min prn</span></div>
+      <div class="ref-row"><span class="ref-key">Neostigmine + Glycopyrrolate</span><span class="ref-val">0.04mg/kg + 0.2mg per 1mg neo</span></div>
+      <div class="ref-row"><span class="ref-key">Phenylephrine (hypotension)</span><span class="ref-val">50–200mcg IV bolus</span></div>
+      <div class="ref-row"><span class="ref-key">Ephedrine (hypotension)</span><span class="ref-val">5–25mg IV</span></div>
+      <div class="ref-row"><span class="ref-key">Vasopressin</span><span class="ref-val">40 units IV (cardiac arrest)</span></div>
+      <div class="ref-row"><span class="ref-key">Adenosine (SVT)</span><span class="ref-val">6mg IV rapid push → 12mg</span></div>
+      <div class="ref-row"><span class="ref-key">Amiodarone (VF/VT)</span><span class="ref-val">300mg IV bolus</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Ventilator Settings — Starting Point</div>
+  <div class="full-card">
+    <div class="full-card-body">
+      <div class="ref-row"><span class="ref-key">Tidal Volume</span><span class="ref-val">6–8 mL/kg IBW</span></div>
+      <div class="ref-row"><span class="ref-key">Rate</span><span class="ref-val">10–14 breaths/min</span></div>
+      <div class="ref-row"><span class="ref-key">I:E Ratio</span><span class="ref-val">1:2</span></div>
+      <div class="ref-row"><span class="ref-key">PEEP</span><span class="ref-val">5 cmH₂O (start)</span></div>
+      <div class="ref-row"><span class="ref-key">FiO₂</span><span class="ref-val">Start 50–100%, titrate to SpO₂</span></div>
+      <div class="ref-row"><span class="ref-key">EtCO₂ goal</span><span class="ref-val">35–45 mmHg</span></div>
+      <div class="ref-row"><span class="ref-key">Peak pressure alarm</span><span class="ref-val">&lt;35 cmH₂O</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- EMERGENCY PAGE -->
+<div class="page" id="page-emergency">
+  <div class="page-header">
+    <div class="page-title" style="color:var(--red)">Emergency Protocols</div>
+    <div class="page-desc">MH · LAST · Anaphylaxis · Laryngospasm · CICO</div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('emergency','mh')">MH</button>
+    <button class="tab-btn" onclick="switchTab('emergency','last')">LAST</button>
+    <button class="tab-btn" onclick="switchTab('emergency','anaphylaxis')">Anaphylaxis</button>
+    <button class="tab-btn" onclick="switchTab('emergency','laryngospasm')">Laryngospasm</button>
+    <button class="tab-btn" onclick="switchTab('emergency','cico')">CICO</button>
+  </div>
+
+  <div class="tab-content active" id="emergency-mh">
+    <div class="alert alert-red"><div class="alert-title">🔴 Malignant Hyperthermia</div>Hypermetabolic crisis triggered by volatile anesthetics + succinylcholine in susceptible patients (RYR1 mutation)</div>
+    <div class="section-label">Recognition</div>
+    <div class="full-card"><div class="full-card-body" style="font-size:13px;line-height:1.8;color:var(--muted)">
+      <strong style="color:var(--red)">Early:</strong> Unexplained ↑EtCO₂ · Masseter spasm · Tachycardia<br>
+      <strong style="color:var(--red)">Late:</strong> Hyperthermia (temp rising &gt;1°C/5min) · Rigidity · Metabolic/resp acidosis · Rhabdomyolysis · Hyperkalemia · DIC
+    </div></div>
+    <div class="section-label">Treatment — Call for Help Immediately</div>
+    <div class="card" id="checklist-mh">
+      <div class="check-item" onclick="toggleCheck(this,'mh')"><div class="check-box"></div><div class="check-content"><div class="check-label">CALL FOR HELP — MH hotline: 1-800-644-9737</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'mh')"><div class="check-box"></div><div class="check-content"><div class="check-label">STOP all volatile agents and succinylcholine</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'mh')"><div class="check-box"></div><div class="check-content"><div class="check-label">Switch to TIVA (propofol + opioid)</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'mh')"><div class="check-box"></div><div class="check-content"><div class="check-label">Hyperventilate with 100% O₂ at high flow (10L/min)</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'mh')"><div class="check-box"></div><div class="check-content"><div class="check-label">Dantrolene 2.5mg/kg IV rapid push — repeat q5min</div><div class="check-sub">Max 10mg/kg · Mix 20mg/60mL sterile water (not NS)</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'mh')"><div class="check-box"></div><div class="check-content"><div class="check-label">Bicarbonate for metabolic acidosis</div><div class="check-sub">1–2 mEq/kg IV</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'mh')"><div class="check-box"></div><div class="check-content"><div class="check-label">Treat hyperkalemia</div><div class="check-sub">Ca gluconate · Insulin/dextrose · Bicarb</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'mh')"><div class="check-box"></div><div class="check-content"><div class="check-label">Active cooling measures</div><div class="check-sub">Ice packs · Cold IV fluids · Cooling blanket · Lavage if needed</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'mh')"><div class="check-box"></div><div class="check-content"><div class="check-label">Foley catheter — monitor UOP for myoglobinuria</div><div class="check-sub">Goal UOP &gt;1mL/kg/hr · Urine may be tea-colored</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'mh')"><div class="check-box"></div><div class="check-content"><div class="check-label">ICU admission — dantrolene 1mg/kg q6h × 24–48h</div></div></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="emergency-last">
+    <div class="alert alert-red"><div class="alert-title">🔴 Local Anesthetic Systemic Toxicity (LAST)</div>LA absorbed systemically → CNS then cardiovascular toxicity. Bupivacaine most cardiotoxic. Can occur up to 60 min after injection.</div>
+    <div class="section-label">Recognition — CNS Before CV</div>
+    <div class="full-card"><div class="full-card-body" style="font-size:13px;line-height:1.8;color:var(--muted)">
+      <strong style="color:var(--gold)">CNS (early):</strong> Tinnitus · Perioral numbness · Metallic taste · Anxiety · Confusion · Seizures<br>
+      <strong style="color:var(--red)">CV (late):</strong> Hypotension · Arrhythmias · Ventricular fibrillation · Cardiovascular collapse
+    </div></div>
+    <div class="section-label">Treatment</div>
+    <div class="card" id="checklist-last">
+      <div class="check-item" onclick="toggleCheck(this,'last')"><div class="check-box"></div><div class="check-content"><div class="check-label">STOP LA injection immediately</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'last')"><div class="check-box"></div><div class="check-content"><div class="check-label">Call for help — get lipid emulsion (Intralipid 20%)</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'last')"><div class="check-box"></div><div class="check-content"><div class="check-label">100% O₂ — airway management as needed</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'last')"><div class="check-box"></div><div class="check-content"><div class="check-label">Seizures: Benzodiazepine (NOT propofol if hemodynamically compromised)</div><div class="check-sub">Midazolam 2–4mg IV · Lorazepam 2–4mg IV</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'last')"><div class="check-box"></div><div class="check-content"><div class="check-label">Intralipid 20% — 1.5mL/kg IV bolus over 1 min</div><div class="check-sub">Then 0.25mL/kg/min continuous infusion</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'last')"><div class="check-box"></div><div class="check-content"><div class="check-label">If cardiac arrest — begin CPR</div><div class="check-sub">Reduce epi dose to &lt;1mcg/kg · Avoid vasopressin · Avoid CCB and beta-blockers</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'last')"><div class="check-box"></div><div class="check-content"><div class="check-label">ECMO if refractory — notify cardiac surgery early</div></div></div>
+    </div>
+    <div class="alert alert-teal" style="margin-top:8px"><div class="alert-title">Max Safe Doses (with epi)</div>
+      Lidocaine: 7mg/kg · Bupivacaine: 3mg/kg · Ropivacaine: 3mg/kg · Chloroprocaine: 12mg/kg
+    </div>
+  </div>
+
+  <div class="tab-content" id="emergency-anaphylaxis">
+    <div class="alert alert-red"><div class="alert-title">🔴 Anaphylaxis</div>IgE-mediated hypersensitivity reaction. Most common triggers in OR: rocuronium, latex, antibiotics, chlorhexidine.</div>
+    <div class="section-label">Recognition</div>
+    <div class="full-card"><div class="full-card-body" style="font-size:13px;line-height:1.8;color:var(--muted)">
+      Hypotension · Tachycardia · Bronchospasm (↑peak pressures) · Urticaria/flushing · Angioedema · ↓SpO₂ · Cardiovascular collapse
+    </div></div>
+    <div class="section-label">Treatment</div>
+    <div class="card" id="checklist-anaphylaxis">
+      <div class="check-item" onclick="toggleCheck(this,'ana')"><div class="check-box"></div><div class="check-content"><div class="check-label">CALL FOR HELP — remove suspected trigger</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'ana')"><div class="check-box"></div><div class="check-content"><div class="check-label">Epinephrine — FIRST LINE</div><div class="check-sub">Mild-mod: 5–10mcg IV bolus · Severe: 0.1–1mg IV · Infusion if needed</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'ana')"><div class="check-box"></div><div class="check-content"><div class="check-label">100% O₂, airway management</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'ana')"><div class="check-box"></div><div class="check-content"><div class="check-label">IV fluid bolus 1–2L crystalloid</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'ana')"><div class="check-box"></div><div class="check-content"><div class="check-label">Diphenhydramine 25–50mg IV</div><div class="check-sub">H1 blocker — second line</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'ana')"><div class="check-box"></div><div class="check-content"><div class="check-label">Famotidine 20mg IV (H2 blocker)</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'ana')"><div class="check-box"></div><div class="check-content"><div class="check-label">Corticosteroids (not immediate but limit biphasic)</div><div class="check-sub">Methylprednisolone 1–2mg/kg IV</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'ana')"><div class="check-box"></div><div class="check-content"><div class="check-label">Bronchospasm: albuterol nebulized / IV</div></div></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="emergency-laryngospasm">
+    <div class="alert alert-red"><div class="alert-title">🔴 Laryngospasm</div>Reflexive closure of vocal cords. Most common at emergence (Stage II). SpO₂ can drop rapidly — act fast.</div>
+    <div class="section-label">Treatment — Stepwise</div>
+    <div class="card" id="checklist-laryngospasm">
+      <div class="check-item" onclick="toggleCheck(this,'ls')"><div class="check-box"></div><div class="check-content"><div class="check-label">CALL FOR HELP</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'ls')"><div class="check-box"></div><div class="check-content"><div class="check-label">100% O₂ — remove any stimulus (suction, oral airway)</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'ls')"><div class="check-box"></div><div class="check-content"><div class="check-label">Jaw thrust + CPAP (10–20 cmH₂O) via mask</div><div class="check-sub">This often breaks partial laryngospasm</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'ls')"><div class="check-box"></div><div class="check-content"><div class="check-label">Larson's point pressure (if trained)</div><div class="check-sub">Firm pressure posterior to ear lobe in mandibular fossa</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'ls')"><div class="check-box"></div><div class="check-content"><div class="check-label">If SpO₂ dropping / no air movement — Succinylcholine</div><div class="check-sub">0.1–0.5mg/kg IV · 4mg/kg IM if no IV access</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'ls')"><div class="check-box"></div><div class="check-content"><div class="check-label">Ventilate then re-intubate if needed</div></div></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="emergency-cico">
+    <div class="alert alert-red"><div class="alert-title">🔴 Can't Intubate Can't Oxygenate (CICO)</div>Cannot place airway AND cannot maintain oxygenation. This is a "can't wait" emergency — patient will die without immediate surgical airway.</div>
+    <div class="section-label">Sequence — Every Second Counts</div>
+    <div class="card" id="checklist-cico">
+      <div class="check-item" onclick="toggleCheck(this,'cico')"><div class="check-box"></div><div class="check-content"><div class="check-label">DECLARE CICO — call for help and difficult airway cart</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'cico')"><div class="check-box"></div><div class="check-content"><div class="check-label">Optimize mask ventilation (two-person, OPA/NPA)</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'cico')"><div class="check-box"></div><div class="check-content"><div class="check-label">Try supraglottic airway (LMA) — last attempt at non-surgical</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'cico')"><div class="check-box"></div><div class="check-content"><div class="check-label">If STILL can't oxygenate → SURGICAL AIRWAY</div><div class="check-sub">Do not delay further — hypoxic brain injury begins at 4–6 minutes</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'cico')"><div class="check-box"></div><div class="check-content"><div class="check-label">Needle cricothyrotomy (temporizing)</div><div class="check-sub">14G angiocath through cricothyroid membrane + jet ventilation</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this,'cico')"><div class="check-box"></div><div class="check-content"><div class="check-label">Surgical cricothyrotomy (definitive)</div><div class="check-sub">Scalpel-finger-bougie technique · Fastest and most reliable</div></div></div>
+    </div>
+    <div class="alert alert-gold" style="margin-top:8px"><div class="alert-title">Cricothyroid Membrane Location</div>
+      Between thyroid cartilage (above) and cricoid cartilage (below). Palpate midline just below the Adam's apple. Horizontal incision, then vertical through membrane.
+    </div>
+  </div>
+</div>
+
+<!-- DRUGS PAGE -->
+<div class="page" id="page-drugs">
+  <div class="page-header">
+    <div class="page-title" style="color:var(--purple)">Drug Reference</div>
+    <div class="page-desc">Opioids · Vasopressors · NMBs · Reversal</div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('drugs','opioids')">Opioids</button>
+    <button class="tab-btn" onclick="switchTab('drugs','vasopressors')">Vasopressors</button>
+    <button class="tab-btn" onclick="switchTab('drugs','nmb')">NMBs</button>
+    <button class="tab-btn" onclick="switchTab('drugs','reversal')">Reversal</button>
+  </div>
+
+  <div class="tab-content active" id="drugs-opioids">
+    <div class="alert alert-teal"><div class="alert-title">Key Principle</div>Opioids are weak bases. Lower pKa = faster onset (more non-ionized at physiologic pH). Lipid solubility drives CNS penetration.</div>
+    <div class="section-label">Receptor Subtypes</div>
+    <div class="full-card"><div class="full-card-body">
+      <div class="ref-row"><span class="ref-key">μ1 (mu1)</span><span class="ref-val">Supraspinal analgesia, euphoria, sedation</span></div>
+      <div class="ref-row"><span class="ref-key">μ2 (mu2)</span><span class="ref-val">Spinal analgesia, resp depression, GI</span></div>
+      <div class="ref-row"><span class="ref-key">κ (kappa)</span><span class="ref-val">Spinal analgesia, dysphoria, dilated pupils</span></div>
+      <div class="ref-row"><span class="ref-key">δ (delta)</span><span class="ref-val">Supraspinal/spinal analgesia, NV</span></div>
+    </div></div>
+    <div class="section-label">Opioid Comparison</div>
+    <div style="overflow-x:auto">
+    <table class="drug-table">
+      <tr><th>Drug</th><th>pKa</th><th>Lipid</th><th>Vd</th><th>t½</th><th>Metab</th><th>Potency</th></tr>
+      <tr><td class="drug-name">Morphine</td><td>8.0</td><td>+</td><td>3–5 L/kg</td><td>2–4h</td><td>Glucuronidation M3G/M6G</td><td>1×</td></tr>
+      <tr><td class="drug-name">Fentanyl</td><td>8.4</td><td>++++</td><td>4 L/kg</td><td>219 min</td><td>1st pass lung, CYP3A4</td><td>100×</td></tr>
+      <tr><td class="drug-name">Alfentanil</td><td>6.5</td><td>+++</td><td>0.4–1 L/kg</td><td>90 min</td><td>CYP450</td><td>10×</td></tr>
+      <tr><td class="drug-name">Sufentanil</td><td>8.0</td><td>++++</td><td>2–3 L/kg</td><td>—</td><td>N-dealkylation liver/gut</td><td>2000–4000×</td></tr>
+      <tr><td class="drug-name">Remifentanil</td><td>7.1</td><td>++</td><td>—</td><td>10–20 min</td><td>RBC esterases</td><td>200–400×</td></tr>
+      <tr><td class="drug-name">Dilaudid</td><td>—</td><td>Low</td><td>—</td><td>2–4h</td><td>No active metabolites</td><td>8×</td></tr>
+      <tr><td class="drug-name">Meperidine</td><td>8.5</td><td>++</td><td>3–5 L/kg</td><td>3–5h</td><td>Normeperidine (active, toxic)</td><td>0.1×</td></tr>
+    </table>
+    </div>
+    <div class="section-label">Drug Pearls</div>
+    <div class="full-card"><div class="full-card-body" style="font-size:12px;line-height:1.8;color:var(--muted)">
+      <strong style="color:var(--teal)">Morphine:</strong> Late vent depression (6–12h), hydrophilic, slow CNS penetration, histamine release<br>
+      <strong style="color:var(--teal)">Fentanyl:</strong> Early vent depression, no histamine, bradycardia, stiff chest, depresses carotid baroreceptor<br>
+      <strong style="color:var(--teal)">Sufentanil:</strong> Stiff chest, rapid BBB penetration, greatest hemodynamic stability<br>
+      <strong style="color:var(--teal)">Remifentanil:</strong> Sort on/off — continuous infusion only, context-insensitive t½<br>
+      <strong style="color:var(--teal)">Dilaudid:</strong> No active metabolites — preferred in renal failure<br>
+      <strong style="color:var(--teal)">Meperidine:</strong> Normeperidine accumulates in renal failure → seizures. Only opioid that treats shivering.
+    </div></div>
+  </div>
+
+  <div class="tab-content" id="drugs-vasopressors">
+    <div class="section-label">Vasopressor Quick Reference</div>
+    <div style="overflow-x:auto">
+    <table class="drug-table">
+      <tr><th>Drug</th><th>Receptors</th><th>HR</th><th>SVR</th><th>CO</th><th>Dose</th></tr>
+      <tr><td class="drug-name">Phenylephrine</td><td>α1 only</td><td>↓ (reflex)</td><td>↑↑</td><td>↓</td><td>50–200mcg IV</td></tr>
+      <tr><td class="drug-name">Ephedrine</td><td>α+β (indirect)</td><td>↑</td><td>↑</td><td>↑</td><td>5–25mg IV</td></tr>
+      <tr><td class="drug-name">Epinephrine</td><td>α1+β1+β2</td><td>↑↑</td><td>↑ (high dose)</td><td>↑↑</td><td>2–10mcg/min infusion</td></tr>
+      <tr><td class="drug-name">Norepinephrine</td><td>α1&gt;&gt;β1</td><td>↓ (reflex)</td><td>↑↑↑</td><td>↓/→</td><td>&lt;2mcg/min → &gt;3mcg/min</td></tr>
+      <tr><td class="drug-name">Dopamine</td><td>DA+β1+α1 (dose)</td><td>↑</td><td>↑ (high)</td><td>↑</td><td>Low 0.5–2 / Mid 2–10 / High &gt;10 mcg/kg/min</td></tr>
+      <tr><td class="drug-name">Vasopressin</td><td>V1 (smooth muscle)</td><td>→</td><td>↑↑</td><td>→/↓</td><td>0.03–0.04 units/min</td></tr>
+    </table>
+    </div>
+    <div class="alert alert-teal" style="margin-top:8px"><div class="alert-title">Phenylephrine vs Ephedrine</div>
+      Phenylephrine: pure α1, ↑SVR, reflex bradycardia → choose if HR already elevated or tachycardia concern (CAD, AS)<br>
+      Ephedrine: mixed α+β indirect → ↑HR and BP → choose if bradycardia present or obstetric patient (better uteroplacental flow)
+    </div>
+  </div>
+
+  <div class="tab-content" id="drugs-nmb">
+    <div class="section-label">Neuromuscular Blockers</div>
+    <div style="overflow-x:auto">
+    <table class="drug-table">
+      <tr><th>Drug</th><th>Type</th><th>Onset</th><th>Duration</th><th>Reversal</th><th>Key Pearl</th></tr>
+      <tr><td class="drug-name">Succinylcholine</td><td>Depolarizing</td><td>45–60 sec</td><td>8–12 min</td><td>None (spontaneous)</td><td>Fasciculations → K⁺ release</td></tr>
+      <tr><td class="drug-name">Rocuronium</td><td>Non-depol (amino)</td><td>60–90 sec (1.2mg/kg: 60 sec)</td><td>30–60 min</td><td>Sugammadex</td><td>RSI dose 1.2mg/kg</td></tr>
+      <tr><td class="drug-name">Vecuronium</td><td>Non-depol (amino)</td><td>3–5 min</td><td>25–40 min</td><td>Sugammadex / Neo</td><td>Minimal CV effects</td></tr>
+      <tr><td class="drug-name">Cisatracurium</td><td>Non-depol (benz)</td><td>3–5 min</td><td>45–60 min</td><td>Neo/Sugammadex</td><td>Hofmann elimination — organ independent</td></tr>
+      <tr><td class="drug-name">Pancuronium</td><td>Non-depol (amino)</td><td>3–5 min</td><td>60–90 min</td><td>Neo</td><td>Tachycardia (vagolytic)</td></tr>
+    </table>
+    </div>
+    <div class="alert alert-gold" style="margin-top:8px"><div class="alert-title">Depolarizing vs Non-Depolarizing</div>
+      Succinylcholine mimics ACh → sustained depolarization → fasciculations → flaccid paralysis.<br>
+      Non-depolarizing: competitive antagonism at NMJ → no fasciculations → reversed by anticholinesterases or sugammadex.
+    </div>
+  </div>
+
+  <div class="tab-content" id="drugs-reversal">
+    <div class="section-label">NMB Reversal</div>
+    <div class="full-card"><div class="full-card-header">Neostigmine + Glycopyrrolate</div><div class="full-card-body">
+      <div class="ref-row"><span class="ref-key">Neostigmine dose</span><span class="ref-val">0.04–0.07mg/kg IV (max 5mg)</span></div>
+      <div class="ref-row"><span class="ref-key">Glycopyrrolate</span><span class="ref-val">0.2mg per 1mg neostigmine</span></div>
+      <div class="ref-row"><span class="ref-key">Works on</span><span class="ref-val">All non-depolarizing NMBs</span></div>
+      <div class="ref-row"><span class="ref-key">Requirement</span><span class="ref-val">TOF ≥2 twitches before giving</span></div>
+      <div class="ref-row"><span class="ref-key">Ceiling effect</span><span class="ref-val">Cannot fully reverse deep block</span></div>
+      <div class="ref-row"><span class="ref-key">Why glycopyrrolate?</span><span class="ref-val">Blocks muscarinic effects: bradycardia, salivation, bronchospasm</span></div>
+    </div></div>
+    <div class="full-card" style="margin-top:8px"><div class="full-card-header" style="color:var(--teal)">Sugammadex</div><div class="full-card-body">
+      <div class="ref-row"><span class="ref-key">Moderate block (TOF ≥2)</span><span class="ref-val">2mg/kg IV</span></div>
+      <div class="ref-row"><span class="ref-key">Deep block (PTC 1–2)</span><span class="ref-val">4mg/kg IV</span></div>
+      <div class="ref-row"><span class="ref-key">Immediate reversal (RSI roc)</span><span class="ref-val">16mg/kg IV</span></div>
+      <div class="ref-row"><span class="ref-key">Works on</span><span class="ref-val">Rocuronium and vecuronium ONLY</span></div>
+      <div class="ref-row"><span class="ref-key">Mechanism</span><span class="ref-val">Encapsulates drug molecules — no muscarinic effects</span></div>
+      <div class="ref-row"><span class="ref-key">No anticholinergic needed</span><span class="ref-val">✓</span></div>
+    </div></div>
+    <div class="full-card" style="margin-top:8px"><div class="full-card-header" style="color:var(--gold)">Naloxone (Opioid Reversal)</div><div class="full-card-body">
+      <div class="ref-row"><span class="ref-key">Dose</span><span class="ref-val">40mcg IV q2min prn (titrate)</span></div>
+      <div class="ref-row"><span class="ref-key">Duration</span><span class="ref-val">~1 hour (re-narcotization possible)</span></div>
+      <div class="ref-row"><span class="ref-key">Side effects</span><span class="ref-val">Reverses analgesia · SNS stimulation · HTN · Dysrhythmias · Pulmonary edema</span></div>
+      <div class="ref-row"><span class="ref-key">Key point</span><span class="ref-val">Titrate slowly — avoid acute withdrawal/HTN crisis</span></div>
+    </div></div>
+  </div>
 </div>
 
 </main>
-</div>
 
 <script>
-// ════════════════════════════════════════════════════════
-//  DATA
-// ════════════════════════════════════════════════════════
-
-const MSMAIDS = [
-  { cat:'M', label:'Anesthesia machine power on', normal:'Powered, display active' },
-  { cat:'M', label:'Flow meters (O₂, Air, N₂O) function', normal:'All float freely, no leak' },
-  { cat:'M', label:'Vaporizer filled, locked, not tilted', normal:'Adequate agent level' },
-  { cat:'M', label:'O₂ flush valve functional', normal:'Flow increases with flush' },
-  { cat:'S', label:'Suction tubing connected & functional', normal:'≥300 mmHg negative pressure' },
-  { cat:'S', label:'Yankauer & suction catheter present', normal:'Within reach' },
-  { cat:'A', label:'Face mask, oral/nasal airways in place', normal:'Multiple sizes available' },
-  { cat:'A', label:'LMA checked & available (backup)', normal:'Cuff checked, lubed' },
-  { cat:'A', label:'ETT verified — cuff check + stylet', normal:'Cuff holds, stylet curved' },
-  { cat:'A', label:'Video laryngoscope available & charged', normal:'Blade clean, camera works' },
-  { cat:'A', label:'Difficult airway cart accessible', normal:'Cart present in room' },
-  { cat:'I', label:'IV access confirmed patent', normal:'Flushes without resistance' },
-  { cat:'I', label:'IV fluids & tubing primed', normal:'No air in line' },
-  { cat:'I', label:'Infusion pumps programmed if needed', normal:'Rates confirmed' },
-  { cat:'D', label:'Induction agents drawn & labeled', normal:'Propofol / Etomidate ready' },
-  { cat:'D', label:'Paralytics drawn & labeled', normal:'Succinylcholine / Roc ready' },
-  { cat:'D', label:'Reversal agents available', normal:'Neostigmine / Sugammadex' },
-  { cat:'D', label:'Emergency drugs immediately available', normal:'Epi, Atropine, Vasopressors' },
-  { cat:'D', label:'Volatile agent in vaporizer confirmed', normal:'Agent ID matches vaporizer label' },
-  { cat:'S2', label:'SpO₂ probe on patient & reading', normal:'Good waveform' },
-  { cat:'S2', label:'EKG leads connected, rhythm visible', normal:'Lead II at minimum' },
-  { cat:'S2', label:'ETCO₂ sampling line connected', normal:'Ready for waveform post-intubation' },
-  { cat:'S2', label:'BP cuff sized and functional', normal:'First reading obtained' },
-  { cat:'S2', label:'Temperature probe in place (if applicable)', normal:'Esophageal or skin probe' },
-];
-
-const ASA15 = [
-  'Final patient / procedure ID verification — confirm with patient',
-  'Machine power & all displays active',
-  'High-pressure O₂ source checked (≥1000 PSI wall / full cylinder)',
-  'Low-pressure O₂ leak test passed — no leaks detected',
-  'Flow meters functional — O₂, Air, N₂O all smooth',
-  'Vaporizer filled, sealed, not tipped — adequate level',
-  'Breathing circuit leak test passed — <300 mL/min at 30 cmH₂O',
-  'APL valve functional in manual AND auto mode',
-  'CO₂ absorber color fresh — purple = exhausted, DO NOT USE',
-  'Ventilator: tidal volume & rate confirmed — TV 6–8 mL/kg IBW',
-  'Suction functional — ≥300 mmHg; Yankauer & suction present',
-  'Airway equipment: masks, ETTs, LMA, video laryngoscope, FOB',
-  'Monitors: SpO₂, EKG, ETCO₂, BP — all reading baseline',
-  'IV access patent, fluids connected, no air in line',
-  'Emergency drugs available & labeled — Epi, Atropine, Vasopressors',
-];
-
-const BETWEEN_CASE = [
-  'Dispose of sharps & contaminated items per protocol',
-  'Remove and dispose of ETT, LMA, breathing circuit',
-  'Wipe down machine with approved disinfectant',
-  'Restock drugs: induction agents, paralytics, analgesics',
-  'Restock airway equipment (ETTs, LMA, oral airways, masks)',
-  'Prime new IV tubing if needed',
-  'Reset ventilator settings to defaults',
-  'Replace CO₂ absorber if color indicates exhaustion',
-  'Reset monitoring leads & probes',
-  'Update medication log & document case',
-  'Confirm next patient ID, procedure & special needs',
-  'Complete circuit leak test for next case',
-];
-
-const MACHINE_PIMP = [
-  { q:'What pressure indicates O₂ cylinder is full?', a:'2000 PSI = full. Below 500 PSI → change cylinder. Wall supply should read ≥50 PSI. Always have a backup cylinder available.' },
-  { q:'What is the significance of a failed circuit leak test?', a:'Indicates leak in the breathing system — patient may receive sub-therapeutic gas concentrations and/or desaturate. Find the leak source (connections, ETT cuff, vaporizer filler cap) before proceeding. Never start a case with a failed leak test.' },
-  { q:'Why check CO₂ absorber color?', a:'Purple/violet = exhausted — DO NOT USE. White/clear = fresh. Spent absorber allows CO₂ rebreathing → hypercarbia → respiratory acidosis → cardiovascular compromise. Replace before the case.' },
-  { q:'What is the APL valve and when do you use manual vs auto?', a:'Adjustable Pressure Limiting valve controls maximum circuit pressure. Manual mode (bag ventilation): set 20–30 cmH₂O. Auto/vent mode: ventilator takes over — APL should be fully open or bypassed. Failure to switch modes = inability to ventilate properly.' },
-  { q:'What is the minimum O₂ flow rate on most machines?', a:'200 mL/min O₂ is the minimum safe flow. Most machines have a hypoxic guard preventing O₂ concentration below 21–25%. Never run pure N₂O — the O₂/N₂O interlock prevents this on modern machines.' },
-  { q:'Walk me through the order of your pre-anesthesia check.', a:'MS MAIDS: Machine (power, flows, vaporizer, flush) → Suction (function, Yankauer) → Airway (masks, ETT, LMA, VL, FOB, cart) → IV (access, fluids, pumps) → Drugs (induction, paralytics, reversal, emergency) → Monitors (SpO₂, EKG, ETCO₂, BP, temp). Then complete the formal ASA 15-point checklist.' },
-];
-
-const STOPBANG = [
-  { letter:'S', q:'Snore', desc:'Do you snore loudly (louder than talking or heard through closed doors)?' },
-  { letter:'T', q:'Tired', desc:'Do you often feel tired, fatigued, or sleepy during the daytime?' },
-  { letter:'O', q:'Observed', desc:'Has anyone observed you stop breathing or choking/gasping during sleep?' },
-  { letter:'P', q:'Pressure', desc:'Do you have or are you being treated for high blood pressure?' },
-  { letter:'B', q:'BMI', desc:'BMI >35 kg/m²?' },
-  { letter:'A', q:'Age', desc:'Age over 50 years old?' },
-  { letter:'N', q:'Neck', desc:'Neck circumference >40 cm (>16 inches)?' },
-  { letter:'G', q:'Gender', desc:'Gender = Male?' },
-];
-
-const MEDS = [
-  { name:'Beta-blockers (metoprolol, atenolol)', action:'cont', label:'CONTINUE', implication:'Abrupt discontinuation → rebound HTN, tachycardia, myocardial ischemia. Continue perioperatively.' },
-  { name:'ACE-I / ARBs (lisinopril, losartan)', action:'hold', label:'HOLD day-of', implication:'Block RAAS → refractory hypotension on induction unresponsive to typical vasopressors. Hold morning of surgery.' },
-  { name:'Diuretics (furosemide, HCTZ)', action:'hold', label:'HOLD/discuss', implication:'Volume depletion and electrolyte imbalances (K+, Na+, Mg2+). Assess fluid status pre-op.' },
-  { name:'Metformin', action:'hold', label:'HOLD day-of', implication:'Risk of lactic acidosis with contrast, hypotension, or low renal flow states. Hold morning of surgery.' },
-  { name:'Insulin', action:'reduce', label:'REDUCE', implication:'Hypoglycemia under general anesthesia is dangerous and undetected. Hold or reduce — check glucose q1hr intraop.' },
-  { name:'GLP-1 agonists (Ozempic, Wegovy)', action:'hold', label:'HOLD 1 WEEK', implication:'Significantly delay gastric emptying → full stomach risk even with adequate fasting. May require RSI.' },
-  { name:'Warfarin / DOACs', action:'case', label:'CASE-SPECIFIC', implication:'Bridge therapy vs hold depending on indication. Check INR. Neuraxial threshold INR <1.5.' },
-  { name:'Clopidogrel (Plavix)', action:'case', label:'CASE-SPECIFIC', implication:'Hold 5–7 days unless bare metal stent <30 days or DES <12 months (do NOT hold). Cardiology input.' },
-  { name:'Chronic opioids', action:'cont', label:'CONTINUE', implication:'Prevent withdrawal. Expect ↑ opioid requirements intraop. Adjust dosing. Multimodal analgesia essential.' },
-  { name:'Levodopa (Parkinson\'s)', action:'cont', label:'CONTINUE', implication:'Missing a dose → rigidity, swallowing dysfunction. Continue through perioperative period.' },
-  { name:'AEDs (seizure medications)', action:'cont', label:'CONTINUE', implication:'Missed dose → perioperative seizure. Continue perioperatively. Check drug interactions with anesthetic agents.' },
-  { name:'SSRIs / SNRIs', action:'cont', label:'CONTINUE', implication:'Continue perioperatively. Watch for serotonin interactions with meperidine, tramadol, methylene blue.' },
-  { name:'MAOIs', action:'spec', label:'⚠ SPECIALIST', implication:'Hypertensive crisis with sympathomimetics. Serotonin syndrome with meperidine. Hold 2 weeks if possible — specialist input required.' },
-  { name:'Herbal supplements', action:'hold', label:'HOLD 2 weeks', implication:'Garlic, ginkgo, ginger → bleeding. Kava, valerian → sedation. St. John\'s Wort → serotonin interactions.' },
-];
-
-const SUBSTANCE = [
-  { substance:'Nicotine (cigarettes, vaping)', timing:'Best ≥4–8 weeks; at minimum hold day-of', flag:false, note:'↑ airway reactivity, mucus production. Shorter cessation still has benefit.' },
-  { substance:'Alcohol', timing:'Hold ≥24–48h; HARD STOP if intoxicated', flag:true, note:'Acute intoxication = hard stop. Chronic use → ↑ anesthetic requirements, hepatic effects, AWS risk.' },
-  { substance:'Marijuana / THC', timing:'≥24 hr (heavy chronic users: longer)', flag:false, note:'Acute intoxication → cardiovascular effects. Chronic use may ↑ anesthetic requirements.' },
-  { substance:'Cocaine', timing:'≥24–72 hr — HARD STOP if used today', flag:true, note:'Arrhythmia, hypertensive crisis, MI risk even hours after use. Never proceed same day.' },
-  { substance:'Methamphetamine', timing:'≥24–48 hr (often longer)', flag:true, note:'Catecholamine depletion after chronic use → severe hypotension intraop. Acute use → HTN, arrhythmia.' },
-  { substance:'Chronic opioids', timing:'CONTINUE baseline — do not stop', flag:false, note:'Abrupt withdrawal causes hemodynamic instability. Continue and adjust intraop dosing accordingly.' },
-];
-
-const LABS = [
-  ['Hgb', '12–17 g/dL', '< 7 → transfusion threshold (case-dependent)'],
-  ['Hct', '36–50%', 'Correlates with Hgb'],
-  ['Platelets', '150–400 k/μL', '< 80k → neuraxial caution; < 50k → contraindicated'],
-  ['WBC', '4.5–11 k/μL', 'Elevated → active infection'],
-  ['Na+', '135–145 mEq/L', 'Severe dysnatremia → CNS risk'],
-  ['K+', '3.5–5.0 mEq/L', '> 5.5 → avoid succinylcholine'],
-  ['Creatinine', '0.6–1.2 mg/dL', 'Elevated → adjust renally cleared drugs'],
-  ['Glucose', '70–100 mg/dL', '< 70 → treat before surgery; > 180 → optimize'],
-  ['INR', '0.8–1.2', '> 1.5 → coagulopathy; neuraxial concern'],
-  ['aPTT', '25–35 sec', 'Elevated → heparin effect or factor deficiency'],
-  ['HCG', 'Negative', 'Positive → surgery implications; must address'],
-];
-
-const PREOP_PIMP = [
-  { q:'Why hold ACE-I/ARBs on the day of surgery?', a:'They block the RAAS → refractory hypotension on induction that does not respond to typical vasopressors (phenylephrine, ephedrine). Especially dangerous with neuraxial anesthesia or hypovolemia. Vasopressin may be required. Hold morning-of for elective cases.' },
-  { q:'What are hard stop criteria for substance use?', a:'Acute intoxication (any substance), unstable vitals (tachycardia, HTN, AMS), active withdrawal symptoms, cocaine use today (arrhythmia, hypertensive crisis, MI risk even hours later).' },
-  { q:'Mallampati III — what does it mean and what\'s your plan?', a:'Only the base of uvula visible = anticipated difficult direct laryngoscopy. Plan: Video laryngoscope as primary intubation tool. Have SGA + fiberoptic ready. Second provider available. Discuss with attending. Multiple predictors → consider awake FOI. Document Plan A→B→C→D.' },
-  { q:'GLP-1 agonist patient — how does this change your assessment?', a:'GLP-1 agonists (semaglutide, tirzepatide) significantly delay gastric emptying. Even with adequate fasting, substantial gastric residual may remain. ASA guidance: hold weekly GLP-1 for 1 week before elective surgery. Consider RSI, point-of-care gastric ultrasound, or metoclopramide pre-treatment.' },
-  { q:'When is succinylcholine absolutely contraindicated?', a:'K+ >5.5 mEq/L · Burns >48h post-injury · Crush injury/rhabdomyolysis · Denervation injuries (UMN/LMN) · Prolonged immobility (>3 days) · Personal/family history of MH · Pseudocholinesterase deficiency · Myopathies (Duchenne, myotonic dystrophy). Alternative: rocuronium 1.2 mg/kg + sugammadex reversal.' },
-  { q:'STOP-BANG score of 6 — how does this change your plan?', a:'High risk OSA. Plan: ↓ opioids → multimodal (NSAIDs, acetaminophen, dexamethasone, regional). Anticipate difficult mask ventilation (have two-person technique ready). CPAP in PACU. Semi-upright positioning. Consider overnight admission for monitoring. Continue home CPAP through perioperative period.' },
-  { q:'Platelet count threshold for neuraxial anesthesia?', a:'80,000–100,000/μL generally required for neuraxial. Below 50k = absolute contraindication. Consider: trend (falling more concerning than stable), etiology (ITP vs. DIC vs. heparin), concurrent anticoagulants, urgency of case. Risk-benefit discussion with attending.' },
-];
-
-const HARD_STOPS = [
-  'Acute intoxication — any substance (alcohol, cocaine, opioids, methamphetamine)',
-  'Active withdrawal symptoms — cardiovascular instability',
-  'Cocaine use today → arrhythmia, hypertensive crisis, MI risk',
-  'Unstable vitals — unexplained tachycardia, HTN, or altered mental status',
-  'Uncontrolled coagulopathy with planned neuraxial technique',
-  'Platelet < 50k with planned neuraxial anesthesia',
-  'MH family history without confirmed TIVA plan',
-  'Active respiratory infection with fever or hypoxia',
-  'Glucose < 70 mg/dL — treat before proceeding',
-  'Decompensated CHF or active MI — cardiology stabilization required first',
-];
-
-const SUCCS_CI = [
-  'K+ >5.5 mEq/L — hyperkalemia → cardiac arrest risk',
-  'Burns >48 hours post-injury — upregulated ACh receptors → massive K+ release',
-  'Crush injury / rhabdomyolysis — same mechanism',
-  'Denervation injuries — UMN or LMN lesions (CVA, spinal injury, Guillain-Barré)',
-  'Prolonged immobility >3 days — muscle denervation physiology',
-  'Personal history of Malignant Hyperthermia (MH)',
-  'Family history of MH — use TIVA + avoid all volatile agents',
-  'Pseudocholinesterase deficiency — prolonged paralysis (hours)',
-  'Myopathies — Duchenne, Becker, myotonic dystrophy → hyperkalemia + rhabdo',
-];
-
-const MED_HX_SYSTEMS = [
-  { system:'CARDIAC', color:'var(--red)', conditions:[
-    { name:'Hypertension (HTN)', impl:'↑ stroke/MI risk; continue antihypertensives; labile BP intraop; arterial line consider' },
-    { name:'Coronary Artery Disease (CAD)', impl:'Maintain O₂ supply/demand balance; avoid tachycardia; consider arterial line' },
-    { name:'MI — within 3 months', impl:'Elective surgery: postpone if possible; hemodynamic stability critical; cardiology clearance' },
-    { name:'Congestive Heart Failure (CHF)', impl:'Avoid fluid overload; etomidate for induction; invasive monitoring; euvolemia essential' },
-    { name:'Atrial Fibrillation (AFib)', impl:'Rate control pre-op; anticoagulation status → bleeding risk; cardioversion risk intraop' },
-    { name:'Pacemaker / ICD / AICD', impl:'Deactivate ICD pre-op; avoid monopolar cautery near device; have external pacer/defibrillator' },
-    { name:'Aortic Stenosis (AS)', impl:'Maintain preload AND afterload; avoid vasodilation; sinus rhythm critical; slow HR preferred' },
-    { name:'Mitral Regurgitation (MR)', impl:'Afterload reduction beneficial; avoid bradycardia; watch volume status; forward flow goal' },
-    { name:'Pulmonary Hypertension', impl:'Avoid hypoxia/hypercapnia/acidosis; NO N₂O; PA catheter consider; prostacyclin analogs available' },
-  ]},
-  { system:'PULMONARY', color:'var(--blue)', conditions:[
-    { name:'Asthma', impl:'Pretreat with bronchodilator; ketamine or volatile agents preferred; avoid histamine releasers (morphine, atracurium)' },
-    { name:'COPD / Emphysema', impl:'Maintain PEEP to prevent gas trapping; avoid over-oxygenation in retainers; barrel chest → difficult ventilation' },
-    { name:'OSA (STOP-BANG ≥3)', impl:'↓ opioids; CPAP postop; semi-upright; extended PACU monitoring; difficult mask ventilation possible' },
-    { name:'Pulmonary Fibrosis / ILD', impl:'Low tidal volumes (6 mL/kg); ↑ PEEP may worsen; avoid high FiO₂; SpO₂ monitoring critical' },
-    { name:'Recent URI / Active Pneumonia', impl:'↑ airway reactivity; bronchospasm risk; postpone elective surgery if active symptoms' },
-    { name:'Tracheostomy (in situ)', impl:'Confirm size/type/cuff; immature tract = false passage risk if decannulated; have extra tube' },
-  ]},
-  { system:'ENDOCRINE', color:'var(--gold)', conditions:[
-    { name:'Diabetes — Type 1 (IDDM)', impl:'Hold insulin (hypoglycemia under GA is dangerous & undetected); check glucose q1hr intraop' },
-    { name:'Diabetes — Type 2 (NIDDM)', impl:'Hold metformin day-of; reduce insulin; target glucose 140–180 mg/dL intraop' },
-    { name:'Hypothyroidism', impl:'↓ anesthetic requirements; ↓ cardiac output; delayed emergence; myxedema coma risk' },
-    { name:'Hyperthyroidism', impl:'Thyroid storm risk intraop; avoid sympathomimetics; beta-blockade preop; avoid ketamine' },
-    { name:'Morbid Obesity (BMI >40)', impl:'RSI consider; ramp position; ↑ PEEP 10+; atelectasis; IBW for drug dosing; bariatric equipment' },
-    { name:'Adrenal Insufficiency', impl:'Stress-dose steroids perioperatively; AVOID etomidate (adrenal suppression for 24h)' },
-  ]},
-  { system:'NEURO', color:'var(--purple)', conditions:[
-    { name:'Seizure Disorder / Epilepsy', impl:'CONTINUE AEDs perioperatively; avoid seizure threshold-lowering agents (tramadol, meperidine)' },
-    { name:'Prior CVA / Stroke', impl:'Document baseline neuro exam; maintain cerebral perfusion pressure; avoid hypotension' },
-    { name:'Dementia / Cognitive Impairment', impl:'↑ POCD risk; minimize anticholinergics/benzodiazepines; regional preferred if possible' },
-    { name:'Parkinson\'s Disease', impl:'CONTINUE levodopa perioperatively — missing dose → rigidity; avoid dopamine antagonists (droperidol, metoclopramide)' },
-    { name:'Myasthenia Gravis', impl:'Sensitive to non-depolarizing NMBAs — use 10–20% of normal dose; avoid succinylcholine if on AChE inhibitor' },
-    { name:'Increased ICP / Brain Tumor', impl:'Avoid N₂O; maintain CPP (MAP − ICP); avoid coughing at emergence; dexamethasone; HV prn' },
-  ]},
-  { system:'RENAL', color:'var(--teal)', conditions:[
-    { name:'Chronic Kidney Disease (CKD)', impl:'Adjust renally cleared drugs; avoid nephrotoxins (NSAIDs, aminoglycosides); K+ monitoring' },
-    { name:'ESRD on Dialysis', impl:'Dialysis timing pre-op; volume status; K+ critically important; fistula arm protection' },
-    { name:'Acute Kidney Injury (AKI)', impl:'Delay elective surgery if possible; maintain renal perfusion pressure; avoid nephrotoxins' },
-  ]},
-  { system:'GI / HEPATIC', color:'var(--green)', conditions:[
-    { name:'GERD / Hiatal Hernia', impl:'Aspiration risk — consider RSI; sodium citrate + metoclopramide prophylaxis; head-up position' },
-    { name:'Cirrhosis / Hepatic Failure', impl:'Coagulopathy; ↓ protein binding; ↓ drug metabolism; ↑ ascites/aspiration risk; avoid hepatotoxic agents' },
-    { name:'Active GI Bleed', impl:'Full stomach protocol; hemodynamic instability; Type & Cross essential; RSI indicated' },
-  ]},
-  { system:'HEMATOLOGY', color:'var(--blue)', conditions:[
-    { name:'Anemia', impl:'Optimize pre-op if elective; T&C if surgical blood loss expected; transfusion threshold plan (Hgb 7–8)' },
-    { name:'Coagulopathy / Bleeding Disorder', impl:'Coag panel review; neuraxial contraindication assessment; hematology consult for major cases' },
-    { name:'HIT (Heparin-Induced Thrombocytopenia)', impl:'ABSOLUTE contraindication to heparin including flushes. Use argatroban or bivalirudin. Alert entire team.' },
-    { name:'Sickle Cell Disease', impl:'Avoid hypoxia/hypothermia/acidosis/dehydration — all precipitate crisis; high FiO₂; warming; hydration' },
-  ]},
-  { system:'MSK', color:'var(--text-dim)', conditions:[
-    { name:'Rheumatoid Arthritis (RA)', impl:'C-spine involvement → difficult airway (atlantoaxial instability); TMJ limitation; consider awake fiberoptic' },
-    { name:'Ankylosing Spondylitis', impl:'Extremely rigid C-spine; awake fiberoptic likely needed; neuraxial may be technically impossible' },
-    { name:'Scoliosis / Kyphosis', impl:'Restrictive lung pattern; difficult ventilation; regional anesthesia may be technically difficult' },
-  ]},
-  { system:'ONCOLOGY', color:'var(--purple)', conditions:[
-    { name:'Prior Bleomycin therapy', impl:'LIMIT FiO₂ to <30% — pulmonary fibrosis risk is O₂-dose dependent. Document and alert team.' },
-    { name:'Anthracyclines (doxorubicin)', impl:'Cardiomyopathy risk — baseline echo; myocardial depression possible; invasive monitoring consider' },
-    { name:'Neck/airway radiation', impl:'Tissue fibrosis → difficult airway; restricted mouth opening; fragile tissue; awake FOI likely' },
-  ]},
-  { system:'PSYCH', color:'var(--text-dim)', conditions:[
-    { name:'SSRI / SNRI use', impl:'Continue perioperatively; watch serotonin interactions (meperidine, tramadol, methylene blue)' },
-    { name:'Alcohol Use Disorder', impl:'AWS starts 6–24hr; ↑ anesthetic requirements; hepatic effects; CIWA monitoring; thiamine' },
-    { name:'Chronic Opioid Use', impl:'Continue baseline; ↑ opioid requirements intraop; withdrawal prevention; multimodal analgesia plan' },
-  ]},
-];
-
-const SX_HX_SYSTEMS = [
-  { system:'CARDIAC', conditions:['CABG (coronary artery bypass graft)','Valve replacement / repair','Cardiac catheterization / stent placement','Pacemaker / ICD implant','Heart transplant'] },
-  { system:'THORACIC', conditions:['Thoracotomy / thoracoscopy (VATS)','Lobectomy / pneumonectomy','Tracheostomy'] },
-  { system:'ABDOMINAL', conditions:['Cholecystectomy (lap or open)','Appendectomy','Bowel resection / colectomy','Liver / hepatic surgery','Pancreatectomy / Whipple','Gastric bypass / bariatric surgery','Hernia repair','Exploratory laparotomy'] },
-  { system:'VASCULAR', conditions:['AAA repair (open or EVAR)','Carotid endarterectomy (CEA)','Peripheral bypass / vascular surgery'] },
-  { system:'ORTHOPEDIC', conditions:['Total hip arthroplasty (THA)','Total knee arthroplasty (TKA)','Spinal surgery (fusion / laminectomy)','Shoulder surgery','Fracture ORIF'] },
-  { system:'NEUROSURGERY', conditions:['Craniotomy','Spinal cord surgery','VP shunt placement / revision'] },
-  { system:'HEAD & NECK', conditions:['Thyroidectomy / parathyroidectomy','Tonsillectomy / adenoidectomy','Laryngoscopy / microlaryngoscopy','Radical neck dissection'] },
-  { system:'OB/GYN', conditions:['Cesarean section','Hysterectomy (lap / open)','Tubal ligation'] },
-  { system:'UROLOGY', conditions:['TURP / cystoscopy','Nephrectomy','Renal transplant'] },
-];
-
-const SPECIAL_FLAGS = [
-  { name:'Malignant Hyperthermia — Personal History', action:'TIVA ONLY — propofol infusion. Avoid ALL volatile agents AND succinylcholine. Have dantrolene on site (2.5 mg/kg). Alert entire OR team. Document prominently.' },
-  { name:'Malignant Hyperthermia — Family History', action:'Same precautions as personal history. TIVA mandatory. Dantrolene immediately available.' },
-  { name:'Pseudocholinesterase Deficiency', action:'Avoid succinylcholine — prolonged paralysis (hours). Use rocuronium + sugammadex. Document for future procedures.' },
-  { name:'Documented Difficult Airway', action:'Review prior records. VL as primary. Awake FOI if multiple predictors. Have backup plan before induction. Do not attempt direct laryngoscopy without backup.' },
-  { name:'Intraoperative Awareness (prior recall)', action:'BIS or other depth of anesthesia monitoring. Discuss with patient pre-op. Benzodiazepine premedication consider. TIVA may reduce risk.' },
-  { name:'Severe PONV (prior)', action:'High-risk multimodal prophylaxis: ondansetron + dexamethasone + scopolamine patch + droperidol consider. TIVA over volatile agents. ↓ N₂O or avoid. Adequate hydration.' },
-];
-
-const ALLERGY_SYSTEMS = [
-  { system:'ANTIBIOTICS', items:[
-    { name:'Penicillin / Amoxicillin', action:'Anaphylaxis → vancomycin or clindamycin for surgical prophylaxis. Rash only → cefazolin usually safe (~1% cross-react). Document reaction type carefully.' },
-    { name:'Cephalosporins (Cefazolin, Keflex)', action:'Avoid cephalosporins. Use vancomycin 15 mg/kg or clindamycin for prophylaxis.' },
-    { name:'Sulfonamides (Bactrim)', action:'Avoid sulfa-containing drugs. No reliable cross-react with loop diuretics (controversial).' },
-    { name:'Vancomycin', action:'Red man syndrome = NOT a true allergy — slow infusion rate, premedicate with diphenhydramine. True allergy: use daptomycin.' },
-  ]},
-  { system:'ANALGESICS / NSAIDs', items:[
-    { name:'Aspirin / NSAIDs (AERD)', action:'Avoid ALL NSAIDs including ketorolac — can trigger bronchospasm. Use acetaminophen + multimodal alternatives.' },
-    { name:'Morphine', action:'True opioid allergy is rare. Morphine causes histamine release (not true allergy) → use fentanyl or hydromorphone instead.' },
-    { name:'Meperidine (Demerol)', action:'Avoid with MAOIs → serotonin syndrome. Avoid in renal failure → normeperidine accumulation → seizures.' },
-    { name:'Codeine', action:'CYP2D6 ultra-rapid metabolizers → excess morphine → respiratory depression. Use opioids not relying on CYP2D6.' },
-  ]},
-  { system:'ANESTHESIA DRUGS', items:[
-    { name:'Succinylcholine / MH History', action:'TIVA ONLY. Avoid ALL volatile agents AND succinylcholine. Dantrolene immediately available. Alert entire team.' },
-    { name:'Rocuronium', action:'Most common cause of anaphylaxis during anesthesia. Alternative: vecuronium, cisatracurium. Have epinephrine drawn.' },
-    { name:'Propofol (egg/soy concern)', action:'True propofol allergy is rare. Egg/soy allergy: use with caution and monitor. True propofol anaphylaxis: use etomidate or ketamine for induction.' },
-    { name:'Latex', action:'FULL latex-free environment required. Latex-free gloves, tubing, IV ports, tape. Alert OR team, PACU, and all consulting teams.' },
-    { name:'Amide Local Anesthetics (lidocaine, bupivacaine, ropivacaine)', action:'True amide LA allergy extremely rare. Most "allergies" are vasovagal or preservative (methylparaben) reactions. True allergy: use ester class (chloroprocaine, tetracaine).' },
-  ]},
-  { system:'CONTRAST / DYES', items:[
-    { name:'Iodinated Contrast', action:'Pre-medicate: methylprednisolone 32 mg PO 12h pre AND 2h pre, diphenhydramine 50 mg IV 1h pre. Use low-osmolar contrast if must be used.' },
-    { name:'Methylene Blue', action:'Check SSRI/SNRI/MAOI use BEFORE administering — serotonin toxicity risk. Check G6PD status. Have resuscitation ready.' },
-  ]},
-  { system:'CARDIAC DRUGS', items:[
-    { name:'ACE Inhibitors — Angioedema', action:'ACE-I angioedema can be life-threatening and affect the airway. This is a true allergy. Use ARBs if still needed. Alert airway team.' },
-    { name:'Heparin (HIT)', action:'HIT II = ABSOLUTE contraindication to ALL heparin including flushes. Use argatroban or bivalirudin. Alert entire team prominently.' },
-    { name:'Protamine', action:'High-risk patients: prior vasectomy, fish allergy, prior protamine exposure, NPH insulin use. Have epinephrine drawn BEFORE administration.' },
-  ]},
-  { system:'FOOD / ENVIRONMENTAL', items:[
-    { name:'Latex cross-reactive foods (banana, kiwi, avocado, chestnut)', action:'Full latex-free precautions even if allergy is food-only — significant cross-reactivity.' },
-    { name:'Shellfish (iodine concern)', action:'Shellfish allergy does NOT predict iodinated contrast allergy (different allergens). Document but do not automatically premedicate based on shellfish alone.' },
-    { name:'Egg / soy allergy (propofol concern)', action:'True anaphylaxis from propofol in egg/soy allergy is rare. Use with caution and monitor. Alternative: etomidate or ketamine if severe allergy.' },
-    { name:'Adhesive / tape allergy', action:'Use paper tape or silk tape alternatives for all monitoring leads and dressings. Note on anesthesia plan.' },
-  ]},
-];
-
-
-// ════════════════════════════════════════════════════════
-//  STATE
-// ════════════════════════════════════════════════════════
-const state = {
-  machine: new Set(),
-  asa15: new Set(),
-  betweencase: new Set(),
-  stopbang: new Set(),
-  medhx: new Set(),
-  sxhx: new Set(),
-  special: new Set(),
-  allergies: new Set(),
-};
-
-// ════════════════════════════════════════════════════════
-//  MODULE SWITCHER
-// ════════════════════════════════════════════════════════
-function showModule(id) {
-  document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('module-' + id).classList.add('active');
+// Page navigation
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
   event.currentTarget.classList.add('active');
-  window.scrollTo(0, 0);
+  toggleSidebar();
+  window.scrollTo(0,0);
 }
 
-// ════════════════════════════════════════════════════════
-//  CARD TOGGLE
-// ════════════════════════════════════════════════════════
-function toggleCard(id) {
-  document.getElementById(id).classList.toggle('open');
+// Sidebar
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
 }
 
-// ════════════════════════════════════════════════════════
-//  PIMP Q TOGGLE
-// ════════════════════════════════════════════════════════
+// Tab switching
+function switchTab(page, tab) {
+  const allTabs = document.querySelectorAll(`#page-${page} .tab-btn`);
+  const allContents = document.querySelectorAll(`#page-${page} .tab-content`);
+  allTabs.forEach(t => t.classList.remove('active'));
+  allContents.forEach(c => c.classList.remove('active'));
+  document.getElementById(`${page}-${tab}`).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Checklist toggle
+function toggleCheck(el, listId) {
+  el.classList.toggle('checked');
+  updateProgress(listId);
+}
+
+function updateProgress(listId) {
+  const containers = document.querySelectorAll(`#checklist-${listId}, #stopbang-card`);
+  let total = 0, done = 0;
+  document.querySelectorAll('.check-item').forEach(item => {
+    const card = item.closest('[id^="checklist-"], #stopbang-card');
+    if (card) {
+      const cardId = card.id.replace('checklist-','');
+      if (cardId === listId || (listId === 'sb' && card.id === 'stopbang-card')) {
+        total++;
+        if (item.classList.contains('checked')) done++;
+      }
+    }
+  });
+  const bar = document.getElementById(`${listId}-progress`);
+  const txt = document.getElementById(`${listId}-text`);
+  if (bar) bar.style.width = total ? (done/total*100)+'%' : '0%';
+  if (txt) txt.textContent = `${done} / ${total} complete`;
+}
+
+function resetChecklist(listId) {
+  document.querySelectorAll(`#checklist-${listId} .check-item`).forEach(item => {
+    item.classList.remove('checked');
+  });
+  updateProgress(listId);
+}
+
+// Pimp Q&A
 function togglePimp(el) {
-  el.closest('.pimp-item').classList.toggle('open');
+  el.classList.toggle('open');
 }
 
-// ════════════════════════════════════════════════════════
-//  CHECKLIST
-// ════════════════════════════════════════════════════════
-function toggleCheck(id, stateKey) {
-  if (state[stateKey].has(id)) state[stateKey].delete(id);
-  else state[stateKey].add(id);
-  const box = document.getElementById('chk-' + stateKey + '-' + id);
-  if (box) box.classList.toggle('checked', state[stateKey].has(id));
-  updateMachineProgress();
-}
-
-function updateMachineProgress() {
-  const total = MSMAIDS.length + ASA15.length + BETWEEN_CASE.length;
-  const done = state.machine.size + state.asa15.size + state.betweencase.size;
-  const pct = Math.round(done / total * 100);
-  document.getElementById('machine-progress').style.width = pct + '%';
-  document.getElementById('machine-progress-label').textContent = done + ' / ' + total + ' complete';
-}
-
-function resetModule(mod) {
-  if (!confirm('Reset all checklists?')) return;
-  state.machine.clear(); state.asa15.clear(); state.betweencase.clear();
-  document.querySelectorAll('[id^="chk-machine-"], [id^="chk-asa15-"], [id^="chk-betweencase-"]').forEach(el => el.classList.remove('checked'));
-  updateMachineProgress();
-}
-
-// ════════════════════════════════════════════════════════
-//  STOP-BANG
-// ════════════════════════════════════════════════════════
-function toggleStopBang(idx) {
-  if (state.stopbang.has(idx)) state.stopbang.delete(idx);
-  else state.stopbang.add(idx);
-  document.getElementById('sb-' + idx).classList.toggle('checked', state.stopbang.has(idx));
-  document.getElementById('stopbang-score').textContent = state.stopbang.size;
-}
-
-// ════════════════════════════════════════════════════════
-//  CONDITION SELECTOR
-// ════════════════════════════════════════════════════════
-function toggleCond(key, stateKey, name, summary) {
-  const set = state[stateKey];
-  if (set.has(key)) set.delete(key);
-  else set.add(key);
-  document.getElementById('cond-' + stateKey + '-' + key).classList.toggle('checked', set.has(key));
-  updateSummary(stateKey);
-}
-
-function updateSummary(stateKey) {
-  let names = [];
-  const set = state[stateKey];
-  if (stateKey === 'medhx') {
-    MED_HX_SYSTEMS.forEach(sys => sys.conditions.forEach((c, i) => {
-      const k = sys.system + '-' + i;
-      if (set.has(k)) names.push(c.name);
-    }));
-    document.getElementById('medhx-count').textContent = names.length;
-    document.getElementById('medhx-active-list').textContent = names.join(' · ');
-  } else if (stateKey === 'sxhx') {
-    SX_HX_SYSTEMS.forEach(sys => sys.conditions.forEach((c, i) => {
-      const k = sys.system + '-' + i;
-      if (set.has(k)) names.push(c);
-    }));
-    document.getElementById('sxhx-count').textContent = names.length;
-    document.getElementById('sxhx-active-list').textContent = names.join(' · ');
-  } else if (stateKey === 'special') {
-    SPECIAL_FLAGS.forEach((f, i) => { if (set.has('sp-' + i)) names.push(f.name); });
-    // special flags don't have their own count badge
-  } else if (stateKey === 'allergies') {
-    ALLERGY_SYSTEMS.forEach(sys => sys.items.forEach((it, i) => {
-      const k = sys.system + '-' + i;
-      if (set.has(k)) names.push(it.name);
-    }));
-    document.getElementById('allergy-count').textContent = names.length;
-    document.getElementById('allergy-active-list').textContent = names.join(' · ');
-  }
-}
-
-// ════════════════════════════════════════════════════════
-//  RENDERERS
-// ════════════════════════════════════════════════════════
-
-function catClass(cat) {
-  return { M:'tag-m', S:'tag-s', S2:'tag-mon', A:'tag-a', I:'tag-i', D:'tag-d' }[cat] || 'tag-m';
-}
-function catLabel(cat) {
-  return { M:'Machine', S:'Suction', S2:'Monitors', A:'Airway', I:'IV', D:'Drugs' }[cat] || cat;
-}
-
-function renderMSMAIDS() {
-  const el = document.getElementById('msmaids-list');
-  el.innerHTML = MSMAIDS.map((item, i) => `
-    <div class="check-item">
-      <div class="check-wrap">
-        <div class="check-box" id="chk-machine-${i}" onclick="toggleCheck(${i},'machine')"></div>
-      </div>
-      <div class="check-content">
-        <div class="check-label"><span class="tag ${catClass(item.cat)}">${catLabel(item.cat)}</span> ${item.label}</div>
-        <div class="check-meta">${item.normal}</div>
-      </div>
-    </div>`).join('');
-}
-
-function renderASA15() {
-  const el = document.getElementById('asa15-list');
-  el.innerHTML = ASA15.map((item, i) => `
-    <div class="check-item">
-      <div class="check-wrap">
-        <div class="check-box" id="chk-asa15-${i}" onclick="toggleCheck(${i},'asa15')"></div>
-      </div>
-      <div class="check-content">
-        <div class="check-label"><span style="font-family:var(--mono);font-size:10px;color:var(--text-dimmer);margin-right:6px">${i+1}</span>${item}</div>
-      </div>
-    </div>`).join('');
-}
-
-function renderBetweenCase() {
-  const el = document.getElementById('betweencase-list');
-  el.innerHTML = BETWEEN_CASE.map((item, i) => `
-    <div class="check-item">
-      <div class="check-wrap">
-        <div class="check-box" id="chk-betweencase-${i}" onclick="toggleCheck(${i},'betweencase')"></div>
-      </div>
-      <div class="check-content">
-        <div class="check-label"><span style="font-family:var(--mono);font-size:10px;color:var(--text-dimmer);margin-right:6px">${i+1}</span>${item}</div>
-      </div>
-    </div>`).join('');
-}
-
-function renderPimp(items, containerId) {
-  const el = document.getElementById(containerId);
-  el.innerHTML = items.map((item, i) => `
-    <div class="pimp-item" id="pimp-${containerId}-${i}">
-      <div class="pimp-q" onclick="this.closest('.pimp-item').classList.toggle('open')">
-        <span class="pimp-icon">⚡</span>
-        <span class="pimp-question">${item.q}</span>
-        <span class="pimp-toggle">▶</span>
-      </div>
-      <div class="pimp-answer">${item.a}</div>
-    </div>`).join('');
-}
-
-function renderSTOPBANG() {
-  const el = document.getElementById('stopbang-list');
-  el.innerHTML = STOPBANG.map((item, i) => `
-    <div class="check-item">
-      <div class="check-wrap">
-        <div class="check-box" id="sb-${i}" onclick="toggleStopBang(${i})"></div>
-      </div>
-      <div class="check-content">
-        <div class="check-label"><strong style="color:var(--gold);font-family:var(--mono)">${item.letter}</strong> — ${item.q}</div>
-        <div class="check-meta">${item.desc}</div>
-      </div>
-    </div>`).join('');
-}
-
-function renderMeds() {
-  const el = document.getElementById('meds-list');
-  el.innerHTML = MEDS.map(m => `
-    <div class="med-row">
-      <div class="med-name">${m.name}</div>
-      <span class="med-action action-${m.action}">${m.label}</span>
-      <div class="med-implication">${m.implication}</div>
-    </div>`).join('');
-}
-
-function renderSubstance() {
-  const el = document.getElementById('substance-list');
-  el.innerHTML = SUBSTANCE.map(s => `
-    <div class="med-row">
-      <div class="med-name">${s.substance}</div>
-      ${s.flag ? '<span class="med-action action-hold">HARD STOP</span>' : ''}
-      <div class="check-meta" style="margin-top:3px"><strong>${s.timing}</strong></div>
-      <div class="med-implication">${s.note}</div>
-    </div>`).join('');
-}
-
-function renderLabs() {
-  const el = document.getElementById('labs-table');
-  el.innerHTML = LABS.map(row => `
-    <tr>
-      <td style="font-family:var(--mono);font-weight:700;color:var(--teal)">${row[0]}</td>
-      <td style="color:var(--text-dim)">${row[1]}</td>
-      <td>${row[2]}</td>
-    </tr>`).join('');
-}
-
-function renderHardStops() {
-  const el = document.getElementById('hardstop-list');
-  el.innerHTML = HARD_STOPS.map(s => `
-    <div class="hardstop-item">
-      <div class="hardstop-dot"></div>
-      <div>${s}</div>
-    </div>`).join('');
-}
-
-function renderSuccsCI() {
-  const el = document.getElementById('succs-list');
-  el.innerHTML = SUCCS_CI.map(s => `
-    <div class="hardstop-item">
-      <div class="hardstop-dot" style="background:var(--red)"></div>
-      <div>${s}</div>
-    </div>`).join('');
-}
-
-function renderMedHx() {
-  const el = document.getElementById('medhx-systems');
-  el.innerHTML = MED_HX_SYSTEMS.map(sys => `
-    <div class="card" id="card-medhx-${sys.system}">
-      <div class="card-header" onclick="toggleCard('card-medhx-${sys.system}')">
-        <div class="card-title" style="color:${sys.color}">${sys.system}</div>
-        <span class="card-chevron">▼</span>
-      </div>
-      <div class="card-body">
-        ${sys.conditions.map((c, i) => `
-          <div class="cond-row">
-            <div class="cond-check" id="cond-medhx-${sys.system}-${i}" onclick="toggleCond('${sys.system}-${i}','medhx','${c.name}')"></div>
-            <div class="cond-content">
-              <div class="cond-name">${c.name}</div>
-              <div class="cond-implication">${c.impl}</div>
-            </div>
-          </div>`).join('')}
-      </div>
-    </div>`).join('');
-}
-
-function renderSxHx() {
-  // Special flags
-  const sfEl = document.getElementById('special-flags-list');
-  sfEl.innerHTML = SPECIAL_FLAGS.map((f, i) => `
-    <div class="cond-row">
-      <div class="cond-check" id="cond-special-sp-${i}" onclick="toggleCond('sp-${i}','special','${f.name}')"></div>
-      <div class="cond-content">
-        <div class="cond-name" style="color:var(--red)">${f.name}</div>
-        <div class="cond-implication">${f.action}</div>
-      </div>
-    </div>`).join('');
-
-  // Surgical history
-  const el = document.getElementById('sxhx-systems');
-  el.innerHTML = SX_HX_SYSTEMS.map(sys => `
-    <div class="card" id="card-sxhx-${sys.system}">
-      <div class="card-header" onclick="toggleCard('card-sxhx-${sys.system}')">
-        <div class="card-title">${sys.system}</div>
-        <span class="card-chevron">▼</span>
-      </div>
-      <div class="card-body">
-        ${sys.conditions.map((c, i) => `
-          <div class="cond-row">
-            <div class="cond-check" id="cond-sxhx-${sys.system}-${i}" onclick="toggleCond('${sys.system}-${i}','sxhx','${c}')"></div>
-            <div class="cond-content">
-              <div class="cond-name">${c}</div>
-            </div>
-          </div>`).join('')}
-      </div>
-    </div>`).join('');
-}
-
-function renderAllergies() {
-  const el = document.getElementById('allergy-systems');
-  el.innerHTML = ALLERGY_SYSTEMS.map(sys => `
-    <div class="card" id="card-allergy-${sys.system}">
-      <div class="card-header" onclick="toggleCard('card-allergy-${sys.system}')">
-        <div class="card-title">${sys.system}</div>
-        <span class="card-chevron">▼</span>
-      </div>
-      <div class="card-body">
-        ${sys.items.map((it, i) => `
-          <div class="cond-row">
-            <div class="cond-check" id="cond-allergies-${sys.system}-${i}" onclick="toggleCond('${sys.system}-${i}','allergies','${it.name}')"></div>
-            <div class="cond-content">
-              <div class="cond-name">${it.name}</div>
-              <div class="cond-implication">${it.action}</div>
-            </div>
-          </div>`).join('')}
-      </div>
-    </div>`).join('');
-}
-
-// ════════════════════════════════════════════════════════
-//  INIT
-// ════════════════════════════════════════════════════════
-function init() {
-  renderMSMAIDS();
-  renderASA15();
-  renderBetweenCase();
-  renderPimp(MACHINE_PIMP, 'machine-pimp-list');
-  renderSTOPBANG();
-  renderMeds();
-  renderSubstance();
-  renderLabs();
-  renderPimp(PREOP_PIMP, 'preop-pimp-list');
-  renderHardStops();
-  renderSuccsCI();
-  renderMedHx();
-  renderSxHx();
-  renderAllergies();
-  updateMachineProgress();
-}
-
-document.addEventListener('DOMContentLoaded', init);
-
-// Register service worker
+// Service Worker registration
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 </script>
 </body>
