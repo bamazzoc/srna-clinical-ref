@@ -1,27 +1,27 @@
-const CACHE = 'crna-ref-v1';
+const CACHE = 'anesthesia-ref-v1';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  'https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&family=Share+Tech+Mono&display=swap'
+  '/anesthesia-reference/',
+  '/anesthesia-reference/index.html',
+  '/anesthesia-reference/manifest.json',
+  'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500;600&family=Share+Tech+Mono&display=swap'
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+  e.waitUntil(
+    caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys =>
-    Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-  ).then(() => self.clients.claim()));
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+    ).then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).then(resp => {
-      const clone = resp.clone();
-      caches.open(CACHE).then(c => c.put(e.request, clone));
-      return resp;
-    })).catch(() => caches.match('/index.html'))
+    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => caches.match('/anesthesia-reference/')))
   );
 });
